@@ -1,0 +1,742 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="vim," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="简介Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，对应400种以上文本文件的语法高亮；官网：www.vim.org">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim 详解">
+<meta property="og:url" content="http://mrchen.org/2016/04/15/Vim-详解/index.html">
+<meta property="og:site_name" content="Not Title">
+<meta property="og:description" content="简介Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，对应400种以上文本文件的语法高亮；官网：www.vim.org">
+<meta property="og:updated_time" content="2016-04-17T01:36:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vim 详解">
+<meta name="twitter:description" content="简介Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，对应400种以上文本文件的语法高亮；官网：www.vim.org">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Vim 详解 | Not Title </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?96729f1c7fee4d30a55720079dbc298a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Not Title</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Mrchen'Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-message">
+          <a href="/message" rel="section">
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Vim 详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-15T20:38:02+08:00" content="2016-04-15">
+              2016-04-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux-Basic/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux Basic</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/15/Vim-详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/Vim-详解/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Vim是一个类似于Vi的著名的功能强大、高度可定制的文本编辑器，对应400种以上文本文件的语法高亮；<br>官网：www.vim.org<br><a id="more"></a></p>
+<hr>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>1.打开文件</p>
+<pre><code>vim [options] [file..]
+    +NUM:打开文件后让光标直接处于第NUM行首；
+    +/PATTERNR：打开文件后，直接让光标处于第一个被PATTERN匹配到的行的行首；
+    file1 -o file2：将file1和file2上下分屏显示； ctrl+ww：上下文件切换
+    file1 -O file2：将file1和file2左右分屏显示； ctrl+ww：左右文件切换
+</code></pre><p>2.编辑模式<br>( 默认模式 )    ( 输入模式–&gt;编辑模式：”Esc” )    ( 末行模式–&gt;编辑模式：”:” )<br>    常用技能：</p>
+<pre><code>h：左    j：下    k：上    l：右
+    0：跳转至行首；
+    ^：跳转至行首的第一个空白字符；
+    $：跳转至行尾；
+    i：当前光标处插入；                        I：行首插入；
+    a：光标后插入；                           A：行尾插入；
+    o：后一行插入；                           O：前一行插入；
+gg,1G：跳转至第一行；
+    G：最后一行；                            #G：跳转至#行;   
+   ZZ：保存退出；
+   xp：交换光标所在处的字符与其后面字符的位置；
+   sp：在同一编辑窗打开第二个文件；在多个编辑文件之间切换，用Ctrl+w
+    r：替换光标所在处单个字符；                R：向后替换；
+    v：光标走过的字符；                       V：光标走过的行；
+    p：向后粘贴                              P：向前粘贴
+   yy：复制当前行                           #yy：复制光标所在行向下#行
+   cc：删除光标做在行，并转换为输出模式；
+    x：删除光标所在处的字符；
+   dd：删除光标所在行；                      #dd：从光标所在处向后删除#行；
+   dw：向后删除光标所在处单词；               d#w：向后删除#个单词；
+   db：向前删除光标所在处单词；                
+   d^：从光标所在处删除到当前行首；
+ d$,D：从光标所在处删除到当前行尾；
+    u：撤销；     ctrl+r：撤销此前的撤销操作；
+                                             #COMMAND：#你懂得~
+                                              更多详情：
+                                                 man vim or vimtutor
+</code></pre><hr>
+<p>3.输入模式<br>编辑模式 –&gt; 输入模式：</p>
+<pre><code>i：insert, 在光标所在处输入；
+I：在光标所在行的行首输入；
+a: append，在光标在处后方输入；
+A：在光标所在行的行尾输入；
+o：在光标所在处的下方打开一个新行；
+O：在光标所在处的上方打开一个新行；
+</code></pre><hr>
+<p>4.末行模式<br>( 输入模式按”Esc”切换到末行模式 )    ( 编辑模式按 “:” 切换到末行模式 )</p>
+<pre><code>：w  保存
+：q  退出
+：qa 全部退出
+：q! 强制退出
+：wq or x 保存退出
+：r /path/form/somefile  读取/PATH/TO/SOMEFILE到光标后；
+：w /path/to/somefile  另存为 /PATH/TO/SOMEFILE
+</code></pre><p>文本搜索，替换，移动，删除，复制</p>
+<pre><code>常用姿势：
+</code></pre><hr>
+<pre><code>:g         搜索
+    :g/text    全局搜索&quot;text&quot;    :g!/text    查看没有&quot;text&quot;的行；
+
+:s         替换
+    :%s/\r//g        末行去掉^M;
+    :m,n s/old text/new text/    将m-n行中匹配到的第一个&quot;old text&quot;替换为&quot;new text&quot;; 
+    :%s/old text/new text/gc     全局替换;将文本中所有的&quot;old text&quot;替换为&quot;new text&quot;;
+        note1：( %表示每一行;    g：所有匹配到的；    c：每个替换需要用户确认； )
+        note2：( .表示当前行; $表示最后一行; +-表示该行的上下n行; 例 &quot;-2&quot; 表示当前行上面第二行. )
+</code></pre><hr>
+<pre><code>:m        移动
+    :m    :i,jmk    表示从&quot;i-j&quot;行移动至&quot;k&quot;行后；
+              例：10,20m100    将10-20行移动到100行后；
+
+:co       复制
+    :i,jcok    表示从&quot;i-j&quot;行复制至&quot;k&quot;行后；
+</code></pre><hr>
+<pre><code>:d        删除
+    :m,nd    删除m-n行；
+    :g/text/d    全局搜索text并删除；
+    :g/^$/d      删除空行；
+    :g/^[[:space:]]*$/d    删除带有空格的空行；
+</code></pre><p>5.组合快捷键</p>
+<pre><code>翻屏：                       模式切换：
+  Ctrl+f：向文件尾翻一屏             输入模式 --&gt; 编辑模式
+  Ctrl+b：向文件首部翻一屏            Esc
+  Ctrl+d：向文件尾部翻半屏            编辑模式 --&gt; 末行模式
+  Ctrl+u：向文件首部翻半屏            :
+  Enter：按行向后翻                  末行模式 --&gt; 编辑模式
+                               Esc
+</code></pre><p><strong><font style="float:right;">本文由马哥教育技术支持,转载请注明出处。Mr.Chen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vim/" rel="tag">#vim</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/15/RPM软件包管理器用法/" rel="next" title="RPM软件包管理器用法">
+                <i class="fa fa-chevron-left"></i> RPM软件包管理器用法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/15/grep-相应的正则表达式和用法（详细）/" rel="prev" title="grep 相应的正则表达式和用法（详细）">
+                grep 相应的正则表达式和用法（详细） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/15/Vim-详解/"
+           data-title="Vim 详解" data-url="http://mrchen.org/2016/04/15/Vim-详解/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Mrchen" />
+          <p class="site-author-name" itemprop="name">Mrchen</p>
+          <p class="site-description motion-element" itemprop="description">Learning linux can make your life better.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/mrcheni" target="_blank" title="微博">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.magedu.com" title="马哥教育" target="_blank">马哥教育</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.twoyang.net" title="TwOyAng'blog" target="_blank">TwOyAng'blog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.chen-hao.com.cn" title="chen-hao" target="_blank">chen-hao</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">2.</span> <span class="nav-text">使用方法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"> Mrchen</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mrcheni"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="disk,partition,mount,mkfs,mke2fs,e2fsck,du,df,tune2fs,swap," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="理解inode：推荐文章：http://www.ruanyifeng.com/blog/2011/12/inode.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 磁盘分区格式化及挂载">
+<meta property="og:url" content="http://mrchen.org/2016/04/15/Linux-磁盘分区格式化及挂载/index.html">
+<meta property="og:site_name" content="Not Title">
+<meta property="og:description" content="理解inode：推荐文章：http://www.ruanyifeng.com/blog/2011/12/inode.html">
+<meta property="og:updated_time" content="2016-04-15T13:34:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 磁盘分区格式化及挂载">
+<meta name="twitter:description" content="理解inode：推荐文章：http://www.ruanyifeng.com/blog/2011/12/inode.html">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Linux 磁盘分区格式化及挂载 | Not Title </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?96729f1c7fee4d30a55720079dbc298a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Not Title</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Mrchen'Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-message">
+          <a href="/message" rel="section">
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 磁盘分区格式化及挂载
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-15T20:37:29+08:00" content="2016-04-15">
+              2016-04-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux-SysAdmin/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux SysAdmin</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/15/Linux-磁盘分区格式化及挂载/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/Linux-磁盘分区格式化及挂载/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>理解inode：<br>推荐文章：<a href="http://www.ruanyifeng.com/blog/2011/12/inode.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2011/12/inode.html</a><br><a id="more"></a></p>
+<h1 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title="磁盘分区"></a>磁盘分区</h1><p>fdisk<br>fdisk提供交互式接口管理分区，操作均在内存中完成,没有直接同步到磁盘；直到使用w命令保存至磁盘中。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">语法：</span><br><span class="line">1.查看分区使用信息：</span><br><span class="line">    fdisk -l [-u] [device...]：列出指定磁盘设备上的分区情况；</span><br><span class="line">2.管理分区</span><br><span class="line">    fdisk device</span><br><span class="line">        常用命令：</span><br><span class="line">           n：创建新分区</span><br><span class="line">           d：删除已有分区</span><br><span class="line">           t：修改分区类型</span><br><span class="line">           l：查看分区类型</span><br><span class="line">           w：保存并退出</span><br><span class="line">           q：不保存退出</span><br><span class="line">           p：显示现有分区</span><br><span class="line">         h/m：查看帮助信息</span><br></pre></td></tr></table></figure></p>
+<p>sfdisk：略,本人不会用.也不想学.</p>
+<p>parted：<br>推荐文章：<a href="http://my.oschina.net/guol/blog/61424" target="_blank" rel="external">http://my.oschina.net/guol/blog/61424</a></p>
+<p>Note：在已经分区并且已挂载其中某分区的磁盘设备上创建的新分区,内核可能在创建完成后无法直接识别.<br>通知内核强制重读分区表：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">查看：$ cat /proc/partitions</span><br><span class="line"></span><br><span class="line">    CentOS 5：partprobe [device]</span><br><span class="line">    CentOS 6,7：partx,kpartx,partprobe</span><br><span class="line">        partx -a [device]</span><br><span class="line">        kpartx -af [device]</span><br></pre></td></tr></table></figure></p>
+<h1 id="磁盘管理"><a href="#磁盘管理" class="headerlink" title="磁盘管理"></a>磁盘管理</h1><p>文件系统管理工具<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkfs -t type = mkfs.&#123;ext(2|3|4)|xfs|vfat...&#125;    创建文件系统</span><br><span class="line"></span><br><span class="line">fsck -t type = fsck.&#123;ext(2|3|4)|xfs|vfat...&#125;    检测及修复文件系统</span><br></pre></td></tr></table></figure></p>
+<p>创建swap文件系统<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Linux上的交换分区必须使用独立的文件系统;System ID必须为82.</span><br><span class="line">mkswap [options] device</span><br><span class="line">    -L LABEL  指明卷标</span><br><span class="line">    -f        强制</span><br></pre></td></tr></table></figure></p>
+<p>mke2fs：系列文件系统管理工具<br> <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">mke2fs [options] device</span><br><span class="line">        -t    &#123;ext2|ext3|ext4&#125;：指明要创建的文件系统类型</span><br><span class="line">              mkfs.ext4 == mkfs -t ext4 == mke2fs -t ext4</span><br><span class="line">        -b    &#123;1024|2048|4096&#125;：指明文件系统的块大小</span><br><span class="line">        -L LABEL    ：指明卷标</span><br><span class="line">        -j    创建有日志功能的文件系统ext3</span><br><span class="line">            mke2fs -j == mke2fs -t ext3 == mkfs -t ext3 == mkfs.ext3</span><br><span class="line">        -i #    bytes-per-inode,指明inode与字节的比率;即每多少字节创建一个inode;</span><br><span class="line">        -N #    直接指明要给此文件系统创建的inode数量;</span><br><span class="line">        -m #    指定预留的空间,百分比</span><br><span class="line">        -O feature[,...]  以指定的特性创建目标文件系统;</span><br></pre></td></tr></table></figure></p>
+<p>tune2fs：查看或修改ext系列文件系统的某些属性<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">tune2fs [options] device</span><br><span class="line">       -l    查看超级块内容</span><br><span class="line">   修改文件系统的属性：</span><br><span class="line">        -j    ext2--&gt;ext3;</span><br><span class="line">        -L LABEL    修改卷标;</span><br><span class="line">        -m #        修改预留空间百分比;</span><br><span class="line">        -O [^]feature[,...]  开启或关闭某种特性;</span><br><span class="line">        -o [^]mount_options  开启或关闭某种默认挂载选项;</span><br><span class="line">                例: 1.默认关闭acl：-o ^acl    2.默认开启acl：-o acl</span><br></pre></td></tr></table></figure></p>
+<p>查看与设定<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">e2lable:</span><br><span class="line">    e2lable device          查看卷标</span><br><span class="line">    e2lable device LABEL    设定卷标</span><br><span class="line"></span><br><span class="line">blkid:</span><br><span class="line">    blkid device    </span><br><span class="line">    blkid -L LABEL    根据LABEL定位设备</span><br><span class="line">    blkid -U UUID     根据UUID定位设备  </span><br><span class="line">  </span><br><span class="line">dumpe2fs：</span><br><span class="line">    dumpe2fs [-h] device    显示ext文件系统属性信息</span><br></pre></td></tr></table></figure></p>
+<p>检测及修复<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">e2fsck：check a Linux ext2/ext3/ext4 file system</span><br><span class="line">    e2fsck [options] device</span><br><span class="line">        -y    对所有问题自动回答为yes</span><br><span class="line">        -f    即使文件系统处于clean状态,也要强制进行检测</span><br><span class="line"></span><br><span class="line">fsck：check and repair a Linux file system</span><br><span class="line">        -t fstype：指明文件系统类型</span><br><span class="line">            fsck -t ext4 == fsck.ext4</span><br><span class="line">        -a    无须交互式而自动修复所有错误</span><br><span class="line">        -r    交互式修复</span><br></pre></td></tr></table></figure></p>
+<h1 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h1><p>启用/关闭某swap<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">swapon</span><br><span class="line">    swapon device</span><br><span class="line">    swapon -L LABEL</span><br><span class="line">swapoff</span><br><span class="line">    swapoff device</span><br><span class="line">    swapoff -L LABEL</span><br></pre></td></tr></table></figure></p>
+<p>mount 挂载详解<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">mount  [-nrw]  [-t vfstype]  [-o options]  device  dir</span><br><span class="line">    命令选项：</span><br><span class="line">        -a：将 /etc/fstab 中定义的所有档案系统挂上</span><br><span class="line">        -r：readonly 只读挂载</span><br><span class="line">        -w：read and write,读写挂载</span><br><span class="line">        -n：默认情况挂载卸载操作会同步/etc/mtab文件中;-n用于禁用此特征</span><br><span class="line">        -t vfstype：</span><br><span class="line">            指明文件系统类型;多数可省,此时mount用blkid判断需挂载设备的文件系统类型</span><br><span class="line">        -L LABEL：挂载时以卷标的方式指明设备        # mount -L LABEL dir</span><br><span class="line">        -U UUID ：挂载时以UUID的方式指明设备        # mount -U UUID dir</span><br><span class="line">    -o options：挂载选项</span><br><span class="line">                  ro：只读</span><br><span class="line">                  rw：读写</span><br><span class="line">          sync/async：同步/异步操作</span><br><span class="line">       atime/noatime：文件或目录在被访问时是否更新其时间戳</span><br><span class="line"> diratime/nodiratime：目录在被访问时是否更新其访问时间戳</span><br><span class="line">         dev/nodev  ：此设备上是否允许创建设备文件</span><br><span class="line">         exec/noexec：是否允许运行此设备上的程序文件</span><br><span class="line">         auto/noauto：打开/关闭自动挂上模式</span><br><span class="line">         user/nouser：是否允许普通用户挂载此文件系统</span><br><span class="line">         suid/nosuid：是否允许程序文件上的suid和sgid特殊权限生效</span><br><span class="line">             remount：重新挂载</span><br><span class="line">                 acl：支持使用facl功能</span><br><span class="line">                      # mount -o acl device dir</span><br><span class="line">                      # tune2fs -o acl device</span><br><span class="line">        defaults：rw, suid, dev, exec, auto, nouser, async, relatime.</span><br></pre></td></tr></table></figure></p>
+<p>umount 卸载<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">    umount</span><br><span class="line">        umount device|dir</span><br><span class="line"></span><br><span class="line">Note:正在被进程访问到的挂载点无法被卸载；</span><br><span class="line"></span><br><span class="line">    查看被那个或者那些进程所占用；</span><br><span class="line">        # lsof MOUNT_POINT</span><br><span class="line">        # fuser -v MOUNT_POINT</span><br><span class="line">        终止所有正在访问某挂载点的进程；</span><br><span class="line">        # fuser -km MOUNT_POINT</span><br></pre></td></tr></table></figure></p>
+<p>两个小命令<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df命令：</span><br><span class="line">	df [OPTION]... [FILE]...</span><br><span class="line">		-l：仅显示本地文件的相关信息；</span><br><span class="line">		-h：人性化显示</span><br><span class="line">		-i：显示inode的使用状态而非blocks</span><br><span class="line">		</span><br><span class="line">du命令：</span><br><span class="line">	du [OPTION]... [FILE]...</span><br><span class="line">		-s:只显示每个参数的总数</span><br><span class="line">		-h:人性化显示</span><br></pre></td></tr></table></figure></p>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p><strong>1.挂载本地的回环设备：</strong></p>
+<pre><code>$ mount -o loop /PATH/TO/SOME_LOOP_FILE   MOUNT_POINT 
+</code></pre><p><strong>2.挂载本地的回环设备：</strong></p>
+<pre><code>$ mount --bind olddir newdir
+</code></pre><p><strong>3.CentOS 6如何使用xfs文件系统：</strong></p>
+<pre><code>$ yum  -y  install  xfsprogs
+创建：mkfs.xfs 
+检测：fsck.xfs     
+</code></pre><p><strong>4.ext2不损坏数据的情况下升级ext4</strong></p>
+<p>1.检查系统是否支持Ext4模块<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ [ -f /lib/modules/`uname -r`/kernel/fs/ext4/ext4.ko ] &amp;&amp; echo OK || echo NO</span><br><span class="line">       # （如果能看到&quot;OK&quot;说明支持若不支持自行Google）</span><br></pre></td></tr></table></figure></p>
+<p>2.检查Ext4模块是否挂载<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ lsmod | grep ext4</span><br><span class="line">        # (看到ext4则已挂载；若没挂在则执行：modprobe ext4)</span><br></pre></td></tr></table></figure></p>
+<p>3.安装e2fsprogs<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install e2fsprogs -y</span><br></pre></td></tr></table></figure></p>
+<p>4.卸载,转换<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ umount /dev/device</span><br><span class="line">$ tune2fs -O has_journal,extents,huge_file,flex_bg,uninit_bg,dir_nlink,extra_isize /dev/device</span><br><span class="line"># 添加ext4特性</span><br></pre></td></tr></table></figure></p>
+<p>5.修复<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ e2fsck <span class="_">-f</span>DC0 /dev/device</span><br></pre></td></tr></table></figure></p>
+<p>6.挂载<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ mount -t ext4 /dev/device dir</span><br></pre></td></tr></table></figure></p>
+<p><strong><font style="float:right;">本文由马哥教育技术支持,转载请注明出处。Mr.Chen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/disk/" rel="tag">#disk</a>
+          
+            <a href="/tags/partition/" rel="tag">#partition</a>
+          
+            <a href="/tags/mount/" rel="tag">#mount</a>
+          
+            <a href="/tags/mkfs/" rel="tag">#mkfs</a>
+          
+            <a href="/tags/mke2fs/" rel="tag">#mke2fs</a>
+          
+            <a href="/tags/e2fsck/" rel="tag">#e2fsck</a>
+          
+            <a href="/tags/du/" rel="tag">#du</a>
+          
+            <a href="/tags/df/" rel="tag">#df</a>
+          
+            <a href="/tags/tune2fs/" rel="tag">#tune2fs</a>
+          
+            <a href="/tags/swap/" rel="tag">#swap</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/15/LVM/" rel="next" title="LVM">
+                <i class="fa fa-chevron-left"></i> LVM
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/15/RPM软件包管理器用法/" rel="prev" title="RPM软件包管理器用法">
+                RPM软件包管理器用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/15/Linux-磁盘分区格式化及挂载/"
+           data-title="Linux 磁盘分区格式化及挂载" data-url="http://mrchen.org/2016/04/15/Linux-磁盘分区格式化及挂载/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Mrchen" />
+          <p class="site-author-name" itemprop="name">Mrchen</p>
+          <p class="site-description motion-element" itemprop="description">Learning linux can make your life better.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/mrcheni" target="_blank" title="微博">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.magedu.com" title="马哥教育" target="_blank">马哥教育</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.twoyang.net" title="TwOyAng'blog" target="_blank">TwOyAng'blog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.chen-hao.com.cn" title="chen-hao" target="_blank">chen-hao</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘分区"><span class="nav-number">1.</span> <span class="nav-text">磁盘分区</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#磁盘管理"><span class="nav-number">2.</span> <span class="nav-text">磁盘管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#挂载"><span class="nav-number">3.</span> <span class="nav-text">挂载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">4.</span> <span class="nav-text">实例</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"> Mrchen</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mrcheni"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
