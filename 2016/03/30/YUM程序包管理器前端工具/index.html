@@ -88,7 +88,7 @@ YUM (Yellowdog Updater Modified)：程序包前端管理工具；自动解决依
 <meta property="og:site_name" content="Not Title">
 <meta property="og:description" content="简介
 YUM (Yellowdog Updater Modified)：程序包前端管理工具；自动解决依赖关系；">
-<meta property="og:updated_time" content="2016-04-16T12:49:25.000Z">
+<meta property="og:updated_time" content="2016-04-18T11:47:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YUM程序包管理器前端工具">
 <meta name="twitter:description" content="简介
@@ -331,10 +331,10 @@ YUM (Yellowdog Updater Modified)：程序包前端管理工具；自动解决依
 <h1 id="用法及配置"><a href="#用法及配置" class="headerlink" title="用法及配置"></a>用法及配置</h1><p>yum客户端常用参数：</p>
 <pre><code>yum [options] [command] [package ...]
 
+    list [package...]  查看软件包    grouplist [packages..]  查看软件包组
+    info [package...]  查看包信息    groupinfo [packages..]  查看包组信息
     install package    安装软件包    groupinstall packages   安装软件包组
     remove  package    卸载软件包    groupremove packages    卸载软件包组
-    list [package...]  查看软件包    grouplist [packages..]  查看软件包组
-    info [package...]  查看包信息    groupinfo [packages..]  查看软件包组信息
     update [package1] [package2] [...]       升级
     downgrade [package1] [package2] [...]    降级 
     check-update    检查可用升级   
@@ -387,7 +387,7 @@ YUM (Yellowdog Updater Modified)：程序包前端管理工具；自动解决依
             baseurl=
             enabled=1
             gpgcheck=0
-</code></pre><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>1.查看zsh信息,安装之,查看及配置文件和生成的文件；<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum info zsh                查看zsh信息</span><br><span class="line">$ yum -y install zsh          自动确认安装zsh</span><br><span class="line">$ rpm -qc zsh                 查看zsh配置文件</span><br><span class="line">$ rpm -ql zsh                 查看生成的文件</span><br><span class="line">$ rpm -qd zsh                 查看生成的帮助文档</span><br></pre></td></tr></table></figure></p>
+</code></pre><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>1.查看zsh信息,安装之,查看及配置文件和生成的文件；<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum info zsh               <span class="comment"># 查看zsh信息</span></span><br><span class="line">$ yum -y install zsh         <span class="comment"># 自动确认安装zsh</span></span><br><span class="line">$ rpm -qc zsh                <span class="comment"># 查看zsh配置文件</span></span><br><span class="line">$ rpm -ql zsh                <span class="comment"># 查看生成的文件</span></span><br><span class="line">$ rpm -qd zsh                <span class="comment"># 查看生成的帮助文档</span></span><br></pre></td></tr></table></figure></p>
 <p><strong><font style="float:right;">本文由马哥教育技术支持,转载请注明出处。Mr.Chen&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></strong></p>
 
       
