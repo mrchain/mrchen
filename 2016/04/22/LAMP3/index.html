@@ -1,0 +1,711 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Apache,LAMP,phpmyadmin,wordpress,xcache,CentOS6-LAMP-Make," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="CentOS 6, lamp (编译安装，module)    (1) 三者分离于两台或三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) 尝试mpm为非prefork机制；    (4) xcache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP3">
+<meta property="og:url" content="http://mrchen.org/2016/04/22/LAMP3/index.html">
+<meta property="og:site_name" content="Not Title">
+<meta property="og:description" content="CentOS 6, lamp (编译安装，module)    (1) 三者分离于两台或三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) 尝试mpm为非prefork机制；    (4) xcache">
+<meta property="og:updated_time" content="2016-04-22T13:42:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LAMP3">
+<meta name="twitter:description" content="CentOS 6, lamp (编译安装，module)    (1) 三者分离于两台或三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) 尝试mpm为非prefork机制；    (4) xcache">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> LAMP3 | Not Title </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?96729f1c7fee4d30a55720079dbc298a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Not Title</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Mrchen'Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-message">
+          <a href="/message" rel="section">
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LAMP3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-22T21:28:24+08:00" content="2016-04-22">
+              2016-04-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux-Server/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux Server</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/22/LAMP3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/22/LAMP3/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CentOS 6, lamp (编译安装，module)</span><br><span class="line">    (1) 三者分离于两台或三台主机；</span><br><span class="line">    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；</span><br><span class="line">    (3) 尝试mpm为非prefork机制；</span><br><span class="line">    (4) xcache</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CentOS release 6.7 (Final)</span><br><span class="line">hsot1:  172.18.56.61  apache2.4 + php</span><br><span class="line">hsot2:  172.18.56.62  mariadb</span><br></pre></td></tr></table></figure>
+<h1 id="实验准备"><a href="#实验准备" class="headerlink" title="实验准备"></a>实验准备</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ setenforce 0</span><br><span class="line">$ service iptables stop</span><br><span class="line"></span><br><span class="line">修改文件:</span><br><span class="line">Linux: /etc/hosts</span><br><span class="line">windows: \Windows\System32\drivers\etc\hosts</span><br><span class="line">添加内容:</span><br><span class="line">172.18.56.71 phpadmin.cc</span><br><span class="line">172.18.56.71 wordpress.cc</span><br><span class="line"></span><br><span class="line">安装可能缺少的工具:</span><br><span class="line">$ yum groupinstall &quot;Development tools&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="编译安装Apache-2-4"><a href="#编译安装Apache-2-4" class="headerlink" title="编译安装Apache-2.4"></a>编译安装Apache-2.4</h1><p><strong>Host1</strong></p>
+<p>说明<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">httpd-2.4 必须要 apr-1.4+的版</span><br><span class="line">apr-1.4+      </span><br><span class="line">apr-util-1.4+</span><br></pre></td></tr></table></figure></p>
+<p>如果此前有安装httpd停止并关闭开机自动启动,建议卸载。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ service httpd stop</span><br><span class="line">$ chkconfig httpd off</span><br><span class="line">$ yum remove httpd</span><br></pre></td></tr></table></figure></p>
+<h2 id="下载源码包"><a href="#下载源码包" class="headerlink" title="下载源码包"></a>下载源码包</h2><pre><code>http://apr.apache.org/download.cgi
+http://httpd.apache.org/download.cgi
+</code></pre><p>如果官网不提供当前版本请自行Google</p>
+<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ tar xf apr-1.5.0.tar.bz2 -C /usr/src/</span><br><span class="line">$ tar xf apr-util-1.5.3.tar.bz2 -C /usr/src/</span><br><span class="line">$ tar xf httpd-2.4.10.tar.bz2 -C /usr/src/</span><br></pre></td></tr></table></figure>
+<h2 id="编译安装apr"><a href="#编译安装apr" class="headerlink" title="编译安装apr"></a>编译安装apr</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /usr/src/apr-1.5.0</span><br><span class="line">$ ./configure --prefix=/usr/local/apr</span><br><span class="line">$ make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h2 id="编译安装apr-util"><a href="#编译安装apr-util" class="headerlink" title="编译安装apr-util"></a>编译安装apr-util</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /usr/src/apr-util-1.5.3</span><br><span class="line">$ ./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr/</span><br><span class="line">$ make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h2 id="编译安装Apache"><a href="#编译安装Apache" class="headerlink" title="编译安装Apache"></a>编译安装Apache</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install pcre-devel openssl-devel</span><br><span class="line">$ cd /usr/src/httpd-2.4.10</span><br><span class="line">$ ./configure --prefix=/usr/local/httpd \       # 指定安装位置</span><br><span class="line">--sysconfdir=/etc/httpd24 \                     # 指定配置文件位置</span><br><span class="line">--with-mpm=prefork  \                           # 默认MPM为prefork模型</span><br><span class="line">--enable-so \</span><br><span class="line">--enable-ssl --enable-cgi \</span><br><span class="line">--enable-rewrite \</span><br><span class="line">--with-zlib \</span><br><span class="line">--with-pcre \</span><br><span class="line">--with-apr=/usr/local/apr \</span><br><span class="line">--with-apr-util=/usr/local/apr-util \</span><br><span class="line">--enable-modules=most \</span><br><span class="line">--enable-mpms-shared=all \</span><br><span class="line"></span><br><span class="line">$ make -j 4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<h2 id="安装后的配置"><a href="#安装后的配置" class="headerlink" title="安装后的配置"></a>安装后的配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ echo &apos;export PATH=/usr/local/httpd/bin:$PATH&apos; &gt; /etc/profile.d/httpd24.sh // 这里必须只能用单引号</span><br><span class="line">$ ln -s /usr/local/httpd/include /usr/include/httpd</span><br><span class="line">$ echo &apos;MANPATH /usr/local/httpd/man&apos; &gt;&gt; /etc/man.config</span><br></pre></td></tr></table></figure>
+<h2 id="添加为服务"><a href="#添加为服务" class="headerlink" title="添加为服务"></a>添加为服务</h2><h3 id="创建服务脚本"><a href="#创建服务脚本" class="headerlink" title="创建服务脚本"></a>创建服务脚本</h3><p>新建<code>/etc/init.d/httpd</code>并保存如下代码<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"># chkconfig: - 85 15</span><br><span class="line"># description: Apache is a World Wide Web server.  It is used to serve \</span><br><span class="line">#        HTML files and CGI.</span><br><span class="line"># processname: httpd</span><br><span class="line"></span><br><span class="line"># pidfile: /var/run/httpd.pid</span><br><span class="line"># config: /etc/httpd/conf/httpd.conf</span><br><span class="line"># Source function library.</span><br><span class="line">. /etc/rc.d/init.d/functions</span><br><span class="line">if [ -f /etc/sysconfig/httpd ]; then</span><br><span class="line">        . /etc/sysconfig/httpd</span><br><span class="line">fi</span><br><span class="line"># This will prevent initlog from swallowing up a pass-phrase prompt if</span><br><span class="line"># mod_ssl needs a pass-phrase from the user.</span><br><span class="line">INITLOG_ARGS=&quot;&quot;</span><br><span class="line"># Set HTTPD=/usr/sbin/httpd.worker in /etc/sysconfig/httpd to use a server</span><br><span class="line"># with the thread-based &quot;worker&quot; MPM; BE WARNED that some modules may not</span><br><span class="line"># work correctly with a thread-based MPM; notably PHP will refuse to start.</span><br><span class="line"># Path to the apachectl script, server binary, and short-form for messages.</span><br><span class="line">apachectl=/usr/local/httpd/bin/apachectl        # 自行修改</span><br><span class="line">httpd=$&#123;HTTPD-/usr/local/httpd/bin/httpd&#125;       # 自行修改</span><br><span class="line">prog=httpd</span><br><span class="line">RETVAL=0</span><br><span class="line"># check for 1.3 configuration</span><br><span class="line">check13 () &#123;</span><br><span class="line">CONFFILE=/etc/httpd/httpd.conf      # 自行修改</span><br><span class="line">GONE=&quot;(ServerType|BindAddress|Port|AddModule|ClearModuleList|&quot;</span><br><span class="line">GONE=&quot;$&#123;GONE&#125;AgentLog|RefererLog|RefererIgnore|FancyIndexing|&quot;</span><br><span class="line">GONE=&quot;$&#123;GONE&#125;AccessConfig|ResourceConfig)&quot;</span><br><span class="line">if grep -Eiq &quot;^[[:space:]]*($GONE)&quot; $CONFFILE; then</span><br><span class="line">  echo</span><br><span class="line">  echo 1&gt;&amp;2 &quot; Apache 1.3 configuration directives found&quot;</span><br><span class="line">  echo 1&gt;&amp;2 &quot; please read @docdir@/migration.html&quot;</span><br><span class="line">  failure &quot;Apache 1.3 config directives test&quot;</span><br><span class="line">  echo</span><br><span class="line">  exit 1</span><br><span class="line">fi</span><br><span class="line">&#125;</span><br><span class="line"># The semantics of these two functions differ from the way apachectl does</span><br><span class="line"># things -- attempting to start while running is a failure, and shutdown</span><br><span class="line"># when not running is also a failure.  So we just do it the way init scripts</span><br><span class="line"># are expected to behave here.</span><br><span class="line">start() &#123;</span><br><span class="line">        echo -n $&quot;Starting $prog: &quot;</span><br><span class="line">        check13 || exit 1</span><br><span class="line">        daemon $httpd $OPTIONS</span><br><span class="line">        RETVAL=$?</span><br><span class="line">        echo</span><br><span class="line">        [ $RETVAL = 0 ] &amp;&amp; touch /var/lock/subsys/httpd</span><br><span class="line">        return $RETVAL</span><br><span class="line">&#125;</span><br><span class="line">stop() &#123;</span><br><span class="line">echo -n $&quot;Stopping $prog: &quot;</span><br><span class="line">killproc $httpd</span><br><span class="line">RETVAL=$?</span><br><span class="line">echo</span><br><span class="line">[ $RETVAL = 0 ] &amp;&amp; rm -f /var/lock/subsys/httpd /var/run/httpd.pid</span><br><span class="line">&#125;</span><br><span class="line">reload() &#123;</span><br><span class="line">echo -n $&quot;Reloading $prog: &quot;</span><br><span class="line">check13 || exit 1</span><br><span class="line">killproc $httpd -HUP</span><br><span class="line">RETVAL=$?</span><br><span class="line">echo</span><br><span class="line">&#125;</span><br><span class="line"># See how we were called.</span><br><span class="line">case &quot;$1&quot; in</span><br><span class="line">  start)</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line">  stop)</span><br><span class="line">stop</span><br><span class="line">;;</span><br><span class="line">  status)</span><br><span class="line">        status $httpd</span><br><span class="line">RETVAL=$?</span><br><span class="line">;;</span><br><span class="line">  restart)</span><br><span class="line">stop</span><br><span class="line">start</span><br><span class="line">;;</span><br><span class="line">  condrestart)</span><br><span class="line">if [ -f /var/run/httpd.pid ] ; then</span><br><span class="line">  stop</span><br><span class="line">  start</span><br><span class="line">fi</span><br><span class="line">;;</span><br><span class="line">  reload)</span><br><span class="line">        reload</span><br><span class="line">;;</span><br><span class="line">  graceful|help|configtest|fullstatus)</span><br><span class="line">$apachectl $@</span><br><span class="line">RETVAL=$?</span><br><span class="line">;;</span><br><span class="line">  *)</span><br><span class="line">echo $&quot;Usage: $prog &#123;start|stop|restart|condrestart|reload|status|fullstatus|graceful|help|configtest&#125;&quot;</span><br><span class="line">exit 1</span><br><span class="line">esac</span><br><span class="line">exit $RETVAL</span><br></pre></td></tr></table></figure></p>
+<h3 id="添加至服务"><a href="#添加至服务" class="headerlink" title="添加至服务"></a>添加至服务</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ chmod +x /etc/init.d/httpd</span><br><span class="line">$ chkconfig --add httpd</span><br></pre></td></tr></table></figure>
+<h1 id="将mpm该为event模式"><a href="#将mpm该为event模式" class="headerlink" title="将mpm该为event模式"></a>将mpm该为event模式</h1><p>(3)尝试mpm为非prefork机制</p>
+<p>修改 <code>/etc/httpd/httpd.conf</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">加载MPM配置文件</span><br><span class="line">#Include /etc/httpd/extra/httpd-mpm.conf        // 修改前</span><br><span class="line">Include /etc/httpd/extra/httpd-mpm.conf         // 修改后</span><br><span class="line"></span><br><span class="line">修改prefork为event机制</span><br><span class="line">LoadModule mpm_prefork_module modules/mod_mpm_prefork.so        // 修改前</span><br><span class="line">LoadModule mpm_event_module modules/mod_mpm_event.so            // 修改后</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="编译php"><a href="#编译php" class="headerlink" title="编译php"></a>编译php</h1><p>官网:<a href="http://www.php.net/" target="_blank" rel="external">http://www.php.net/</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ tar xf php-5.4.40.tar.bz2 -C /usr/src/</span><br><span class="line">$ cd /usr/src/php-5.4.40</span><br><span class="line">$ ./configure --prefix=/usr/local/php \</span><br><span class="line">--with-mysql=mysqlnd  \         # mariadb 不在本机，所以指向mysqlnd</span><br><span class="line">--with-mysqli=mysqlnd \         # mysqlnd 是什么请自行Google</span><br><span class="line">--with-pdo-mysql=mysqlnd \</span><br><span class="line">--with-openssl \</span><br><span class="line">--enable-mbstring \</span><br><span class="line">--with-png-dir \</span><br><span class="line">--with-jpeg-dir \</span><br><span class="line">--with-freetype-dir \</span><br><span class="line">--with-zlib \</span><br><span class="line">--with-libxml-dir=/usr/ \</span><br><span class="line">--enable-xml --enable-sockets \</span><br><span class="line">--with-apxs2=/usr/local/httpd/bin/apxs \</span><br><span class="line">--with-mcrypt --with-config-file-path=/etc \</span><br><span class="line">--with-config-file-scan-dir=/etc/php.d \</span><br><span class="line">--with-bz2 \</span><br><span class="line">--enable-maintainer-zts</span><br><span class="line"></span><br><span class="line">$ make -j 4 &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<h2 id="常见错误"><a href="#常见错误" class="headerlink" title="常见错误"></a>常见错误</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">错误:configure: error: xml2-config not found. Please check your libxml2 installation.</span><br><span class="line">  $ yum install libxml2-devel -y</span><br><span class="line"></span><br><span class="line">错误:configure: error: Please reinstall the BZip2 distribution</span><br><span class="line">  $ yum install bzip2-devel -y</span><br><span class="line"></span><br><span class="line">错误:configure: error: mcrypt.h not found. Please reinstall libmcrypt.</span><br><span class="line">  $ yum install libmcrypt-devel</span><br><span class="line"></span><br><span class="line">如果多次编译及安装可能会出现如下错误:</span><br><span class="line">  cp: cannot stat `sapi/cli/php.1&apos;: No such file or directory</span><br><span class="line">解决方法:</span><br><span class="line">  ./buildconf --force</span><br></pre></td></tr></table></figure>
+<h2 id="安装后的配置-1"><a href="#安装后的配置-1" class="headerlink" title="安装后的配置"></a>安装后的配置</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ln -s /usr/local/php/bin/* /usr/bin/</span><br><span class="line">$ ln -s /usr/local/php/include/ /usr/include/php</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="Apache-PHP"><a href="#Apache-PHP" class="headerlink" title="Apache + PHP"></a>Apache + PHP</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /usr/src/php-5.4.40</span><br><span class="line">$ cp php.ini-production /etc/php.ini</span><br></pre></td></tr></table></figure>
+<p>在<code>/etc/httpd/httpd.conf</code>添加如下内容<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">AddType application/x-httpd-php .php</span><br><span class="line">LoadModule php5_module        modules/libphp5.so</span><br></pre></td></tr></table></figure></p>
+<p><strong>host2</strong><br>编译<code>Mariadb</code>不涉及在本博客，我会专门写一遍关于编译<code>Mariadb</code>的文章<br><code>CentOS 6</code>为<code>mysql-server</code><br><code>CentOS 7</code>为<code>mariadb-server</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">### 安装mysql-server</span><br><span class="line">$ yum install mysql-server</span><br><span class="line"></span><br><span class="line">### 为wordpress创建数据库及帐号</span><br><span class="line">mysql&gt; create user &apos;wordpress&apos;@&apos;172.18.56.61&apos;;</span><br><span class="line">mysql&gt; create database &apos;wordpress&apos;;</span><br><span class="line">mysql&gt; grant all on wordpress.* to &apos;wordpress&apos;@&apos;172.18.56.61&apos; identified by &apos;wordpress&apos;;</span><br><span class="line"></span><br><span class="line">### 为phpmyadmin创建帐号</span><br><span class="line">mysql&gt; create user &apos;root&apos;@&apos;172.18.56.61&apos;;</span><br><span class="line">mysql&gt; grant all on *.* to &apos;root&apos;@&apos;172.18.56.61&apos; identified by &apos;123456&apos;;</span><br></pre></td></tr></table></figure></p>
+<h1 id="创建虚拟主机"><a href="#创建虚拟主机" class="headerlink" title="创建虚拟主机"></a>创建虚拟主机</h1><p>一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；</p>
+<p><code>/etc/httpd/httpd.conf</code> 添加如下内容<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Include /etc/httpd/conf.d/*.conf</span><br></pre></td></tr></table></figure></p>
+<p>创建 <code>/etc/httpc/conf.d/wordpress.conf</code> 并添加如下内容.<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DirectoryIndex index.php index.html</span><br><span class="line">    ServerAdmin admin@wordpress.cc</span><br><span class="line">    ServerName wordpress.cc</span><br><span class="line">    DocumentRoot /data/www/wordpress</span><br><span class="line">    ErrorLog &quot;logs/wordpress.cc-error_log&quot;</span><br><span class="line">    TransferLog &quot;logs/wordpress.cc-access_log&quot;</span><br><span class="line">    &lt;Directory &quot;/data/www/wordpress&quot;&gt;</span><br><span class="line">        Options Indexes FollowSymLinks</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>创建 <code>/etc/httpd/conf.d/phpmyadmin.conf</code> 并添加如下内容.<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    DirectoryIndex index.php index.html</span><br><span class="line">    ServerAdmin admin@phpmyadmin.cc</span><br><span class="line">    ServerName  phpmyadmin.cc</span><br><span class="line">    ErrorLog &quot;logs/phpmyadmin.cc-error_log&quot;</span><br><span class="line">    TransferLog &quot;logs/phpmyadmin.cc-access_log&quot;</span><br><span class="line">    DocumentRoot &quot;/data/www/phpmyadmin&quot;</span><br><span class="line">    &lt;Directory &quot;/data/www/phpmyadmin&quot;&gt;</span><br><span class="line">        Options None</span><br><span class="line">        AllowOverride None</span><br><span class="line">    Require all granted</span><br><span class="line">  &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir /data/www/ -p</span><br></pre></td></tr></table></figure>
+<h2 id="phpMyadmin"><a href="#phpMyadmin" class="headerlink" title="phpMyadmin"></a>phpMyadmin</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /data/www</span><br><span class="line">$ wget https://files.phpmyadmin.net/phpMyAdmin/4.6.0/phpMyAdmin-4.6.0-all-languages.zip</span><br><span class="line">$ unzip phpMyAdmin-4.6.0-all-languages.zip</span><br><span class="line">$ mv phpMyAdmin-4.6.0-all-languages phpmyadmin</span><br><span class="line">$ cd phpmyadmin; cp config.sample.inc.php config.inc.php</span><br><span class="line"></span><br><span class="line">修改config.inc.php</span><br><span class="line">  $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;localhost&apos;;      // 修改前</span><br><span class="line">  $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;172.18.56.62&apos;;   // 172.18.56.62 是 Mariadb服务器IP地址.</span><br><span class="line"></span><br><span class="line">生成随机数:</span><br><span class="line">$ openssl rand -base64 20</span><br><span class="line">Js/yatgOt2UBJMkKqkeJfFX9RKA                     // 为生成的随机数</span><br><span class="line"></span><br><span class="line">将生成的随机数添加到config.inc.php:</span><br><span class="line">前: $cfg[&apos;blowfish_secret&apos;] = &apos;&apos;; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */</span><br><span class="line">后: $cfg[&apos;blowfish_secret&apos;] = &apos;Js/yatgOt2UBJMkKqkeJfFX9RKA&apos;; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */</span><br><span class="line"></span><br><span class="line">根据情况修改 config.inc.php                 // Mariadb与httpd为同一台主机则跳过这一步.</span><br><span class="line">前: $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;localhost&apos;;</span><br><span class="line">后: $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;172.18.56.72&apos;;   // 172.18.56.62 是 Mariadb服务器IP地址.</span><br></pre></td></tr></table></figure>
+<p><strong>* 访问出错: phpMyAdmin - 错误 您应升级到 MySQL 5.5.0 或更高版本。解决方法：降级phpMyadmin</strong></p>
+<h2 id="wordpress"><a href="#wordpress" class="headerlink" title="wordpress"></a>wordpress</h2><p>官网:<a href="https://cn.wordpress.org/" target="_blank" rel="external">https://cn.wordpress.org/</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /data/www</span><br><span class="line">cd /data/www</span><br><span class="line">$ wget https://cn.wordpress.org/wordpress-4.5-zh_CN.tar.gz</span><br><span class="line">$ unzip wordpress-4.5-zh_CN.tar.gz</span><br><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<h1 id="xcache"><a href="#xcache" class="headerlink" title="xcache"></a>xcache</h1><h2 id="编译安装xcache"><a href="#编译安装xcache" class="headerlink" title="编译安装xcache"></a>编译安装xcache</h2><p>xcache<br>官网:<a href="http://xcache.lighttpd.net/" target="_blank" rel="external">http://xcache.lighttpd.net/</a><br>可能EPEL源中xcache性能不升反降，这里就不多做说明，可自行测试 </p>
+<hr>
+<p>安装前压力测试<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ab -n 1000 -c 10 http://wordpress.cc/index.php</span><br><span class="line">        $ Requests per second:    34.76 [#/sec] (mean)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install php-devel -y 		# xcache依赖php-devel</span><br><span class="line">$ wget http://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.bz2</span><br><span class="line">$ tar xf xcache-3.2.0.tar.bz2</span><br><span class="line">$ cd xcache-3.2.0</span><br><span class="line">$ phpiz</span><br><span class="line">$ ./configure --enable-xcache --with-php-config=`which php-config`</span><br><span class="line">$ make &amp;&amp; make install</span><br><span class="line">$ mkdir /etc/php.d</span><br><span class="line">$ cp xcache.ini /etc/php.d</span><br><span class="line">$ service restart httpd</span><br></pre></td></tr></table></figure>
+<hr>
+<p>安装后压力测试<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ab -n 1000 -c 10 http://phpadmin.cc/index.php</span><br><span class="line">    Requests per second:    188.02 [#/sec] (mean)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong> <span style="color:red">OK</span> </strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Apache/" rel="tag">#Apache</a>
+          
+            <a href="/tags/LAMP/" rel="tag">#LAMP</a>
+          
+            <a href="/tags/phpmyadmin/" rel="tag">#phpmyadmin</a>
+          
+            <a href="/tags/wordpress/" rel="tag">#wordpress</a>
+          
+            <a href="/tags/xcache/" rel="tag">#xcache</a>
+          
+            <a href="/tags/CentOS6-LAMP-Make/" rel="tag">#CentOS6-LAMP-Make</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/22/LAMP2/" rel="next" title="LAMP2">
+                <i class="fa fa-chevron-left"></i> LAMP2
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/22/LAMP3/"
+           data-title="LAMP3" data-url="http://mrchen.org/2016/04/22/LAMP3/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Mrchen" />
+          <p class="site-author-name" itemprop="name">Mrchen</p>
+          <p class="site-description motion-element" itemprop="description">Learning linux can make your life better.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/mrcheni" target="_blank" title="微博">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.magedu.com" title="马哥教育" target="_blank">马哥教育</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.psiphon3.net/zh/download.html" title="科学上网" target="_blank">科学上网</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.chen-hao.com.cn" title="chen-hao" target="_blank">chen-hao</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.twoyang.net" title="TwOyAng'blog" target="_blank">TwOyAng'blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实验环境"><span class="nav-number">1.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验准备"><span class="nav-number">2.</span> <span class="nav-text">实验准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译安装Apache-2-4"><span class="nav-number">3.</span> <span class="nav-text">编译安装Apache-2.4</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载源码包"><span class="nav-number">3.1.</span> <span class="nav-text">下载源码包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压"><span class="nav-number">3.2.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装apr"><span class="nav-number">3.3.</span> <span class="nav-text">编译安装apr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装apr-util"><span class="nav-number">3.4.</span> <span class="nav-text">编译安装apr-util</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装Apache"><span class="nav-number">3.5.</span> <span class="nav-text">编译安装Apache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装后的配置"><span class="nav-number">3.6.</span> <span class="nav-text">安装后的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加为服务"><span class="nav-number">3.7.</span> <span class="nav-text">添加为服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建服务脚本"><span class="nav-number">3.7.1.</span> <span class="nav-text">创建服务脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加至服务"><span class="nav-number">3.7.2.</span> <span class="nav-text">添加至服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将mpm该为event模式"><span class="nav-number">4.</span> <span class="nav-text">将mpm该为event模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译php"><span class="nav-number">5.</span> <span class="nav-text">编译php</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见错误"><span class="nav-number">5.1.</span> <span class="nav-text">常见错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装后的配置-1"><span class="nav-number">5.2.</span> <span class="nav-text">安装后的配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache-PHP"><span class="nav-number">6.</span> <span class="nav-text">Apache + PHP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建虚拟主机"><span class="nav-number">7.</span> <span class="nav-text">创建虚拟主机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">8.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建目录"><span class="nav-number">8.1.</span> <span class="nav-text">创建目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phpMyadmin"><span class="nav-number">8.2.</span> <span class="nav-text">phpMyadmin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wordpress"><span class="nav-number">8.3.</span> <span class="nav-text">wordpress</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#xcache"><span class="nav-number">9.</span> <span class="nav-text">xcache</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装xcache"><span class="nav-number">9.1.</span> <span class="nav-text">编译安装xcache</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"> Mrchen</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mrcheni"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

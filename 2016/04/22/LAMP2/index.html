@@ -1,0 +1,695 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Apache,LAMP,phpmyadmin,wordpress,xcache,php-fpm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="CentOS 7, lamp (php-fpm)    (1) 三者分离于三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) xcache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP2">
+<meta property="og:url" content="http://mrchen.org/2016/04/22/LAMP2/index.html">
+<meta property="og:site_name" content="Not Title">
+<meta property="og:description" content="CentOS 7, lamp (php-fpm)    (1) 三者分离于三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) xcache">
+<meta property="og:updated_time" content="2016-04-22T13:43:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LAMP2">
+<meta name="twitter:description" content="CentOS 7, lamp (php-fpm)    (1) 三者分离于三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) xcache">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> LAMP2 | Not Title </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?96729f1c7fee4d30a55720079dbc298a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Not Title</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Mrchen'Blog</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-message">
+          <a href="/message" rel="section">
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LAMP2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-22T20:43:14+08:00" content="2016-04-22">
+              2016-04-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux-Server/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux Server</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/22/LAMP2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/22/LAMP2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CentOS 7, lamp (php-fpm)</span><br><span class="line">    (1) 三者分离于三台主机；</span><br><span class="line">    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；</span><br><span class="line">    (3) xcache</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h1 id="实验准备"><a href="#实验准备" class="headerlink" title="实验准备"></a>实验准备</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ setenforce 0</span><br><span class="line">$ systemctl stop iptables</span><br><span class="line">$ systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">修改文件:</span><br><span class="line">Linux: /etc/hosts</span><br><span class="line">windows: \Windows\System32\drivers\etc\hosts</span><br><span class="line">添加内容:</span><br><span class="line">172.18.56.71 phpadmin.cc</span><br><span class="line">172.18.56.71 wordpress.cc</span><br></pre></td></tr></table></figure>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">三者分离于三台主机</span><br><span class="line"></span><br><span class="line">host1: 172.18.56.70	 httpd</span><br><span class="line">host2: 172.18.56.71  php-fpm</span><br><span class="line">host3: 172.18.56.72	 mariadb</span><br></pre></td></tr></table></figure>
+<p><strong>Host1</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install httpd -y</span><br></pre></td></tr></table></figure></p>
+<p><strong>Host2</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install php-fpm php-mysql php-mbstring -y</span><br></pre></td></tr></table></figure></p>
+<p>修改 <code>/etc/php-fpm.d/www.conf</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen = 127.0.0.1:9000				// 监听在那个IP:prot</span><br><span class="line">listen.allowed_clients = 127.0.0.1	// 允许那个地址访问</span><br><span class="line">修改为</span><br><span class="line">listen = 172.18.56.71:9000</span><br><span class="line">listen.allowed_clients = 172.18.56.70</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ systemctl start php-fpm</span><br></pre></td></tr></table></figure>
+<p><strong>Host3</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install mariadb-server -y</span><br><span class="line">$ systemctl start mariadb</span><br><span class="line"></span><br><span class="line">mysql&gt; create uesr &apos;root&apos;@&apos;172.18.56.%&apos;;</span><br><span class="line">mysql&gt; grant all on *.* to &apos;root&apos;@&apos;172.18.56.%&apos; identified by &apos;123456&apos;;</span><br><span class="line">mysql&gt; create user &apos;wordpress&apos;@&apos;172.18.56.71&apos;;</span><br><span class="line">mysql&gt; create database wordpress;</span><br><span class="line">mysql&gt; grant all on wordpress.* to &apos;wordpress&apos;@&apos;172.18.56.71&apos; identified by &apos;wordpress&apos;;</span><br></pre></td></tr></table></figure></p>
+<h1 id="创建虚拟主机"><a href="#创建虚拟主机" class="headerlink" title="创建虚拟主机"></a>创建虚拟主机</h1><h2 id="添加配置文件"><a href="#添加配置文件" class="headerlink" title="添加配置文件"></a>添加配置文件</h2><p>一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；<br><strong>Host1</strong></p>
+<p>/etc/httpd/conf.d/phpadmin.conf<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerName phpadmin.cc</span><br><span class="line">    ProxyRequests Off</span><br><span class="line">    DirectoryIndex index.php </span><br><span class="line">    DocumentRoot /data/www/phpmyadmin</span><br><span class="line">    ProxyPassMatch ^/(.*\.php)$ fcgi://172.18.56.71:9000/data/www/phpmyadmin/$1</span><br><span class="line">    &lt;Directory &quot;/data/www/phpmyadmin&quot;&gt;</span><br><span class="line">        Options None</span><br><span class="line">        AllowOverride None</span><br><span class="line">        Require all granted</span><br><span class="line">        &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>/etc/httpd/conf.d/wordpress.conf<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerName wordpress.cc</span><br><span class="line">    ProxyRequests Off</span><br><span class="line">    DirectoryIndex index.php </span><br><span class="line">    DocumentRoot /data/www/wordpress</span><br><span class="line">    ProxyPassMatch ^/(.*\.php)$ fcgi://172.18.56.71:9000/data/www/wordpress/$1</span><br><span class="line">    &lt;Directory &quot;/data/www/wordpress&quot;&gt;</span><br><span class="line">        Options None</span><br><span class="line">        AllowOverride None</span><br><span class="line">        Require all granted</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>Host1 and Host2</strong><br><code>注意:两台服务都得在同样目录放同样的文件,不然图片及样式显示不全.</code></p>
+<h2 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ mkdir -p /data/www/</span><br></pre></td></tr></table></figure>
+<h2 id="phpmyadmin"><a href="#phpmyadmin" class="headerlink" title="phpmyadmin"></a>phpmyadmin</h2><p>官网:<a href="http://www.phpmyadmin.net/" target="_blank" rel="external">http://www.phpmyadmin.net/</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /data/www</span><br><span class="line">$ wget https://files.phpmyadmin.net/phpMyAdmin/4.6.0/phpMyAdmin-4.6.0-all-languages.zip</span><br><span class="line">$ unzip phpMyAdmin-4.6.0-all-languages.zip</span><br><span class="line">$ mv phpMyAdmin-4.6.0-all-languages phpmyadmin</span><br><span class="line">$ cd phpmyadmin; cp config.sample.inc.php config.inc.php</span><br><span class="line"></span><br><span class="line">修改config.inc.php</span><br><span class="line">$cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;172.18.56.72&apos;;   // 172.18.56.72 是 Mariadb服务器IP地址.</span><br><span class="line"></span><br><span class="line">生成随机数:</span><br><span class="line">$ openssl rand -base64 20</span><br><span class="line">Js/yatgOt2UBJMkKqkeJfFX9RKA                     // 为生成的随机数</span><br><span class="line"></span><br><span class="line">将生成的随机数添加到config.inc.php:</span><br><span class="line">前: $cfg[&apos;blowfish_secret&apos;] = &apos;&apos;; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */</span><br><span class="line">后: $cfg[&apos;blowfish_secret&apos;] = &apos;Js/yatgOt2UBJMkKqkeJfFX9RKA&apos;; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */</span><br><span class="line"></span><br><span class="line">根据情况修改 config.inc.php                 // Mariadb与httpd为同一台主机则跳过这一步.</span><br><span class="line">前: $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;localhost&apos;;</span><br><span class="line">后: $cfg[&apos;Servers&apos;][$i][&apos;host&apos;] = &apos;172.18.56.72&apos;;   // 172.18.56.72 是 Mariadb服务器IP地址.</span><br><span class="line"></span><br><span class="line">错误: The mbstring extension is missing. Please check your PHP configuration.</span><br><span class="line">解决: $ yum install php-mbstring -y ; systemctl reload httpd</span><br></pre></td></tr></table></figure>
+<h2 id="wordpress"><a href="#wordpress" class="headerlink" title="wordpress"></a>wordpress</h2><p>官网:<a href="https://cn.wordpress.org/" target="_blank" rel="external">https://cn.wordpress.org/</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cd /data/www</span><br><span class="line">$ cd /data/www</span><br><span class="line">$ wget https://cn.wordpress.org/wordpress-4.5-zh_CN.tar.gz</span><br><span class="line">$ unzip wordpress-4.5-zh_CN.tar.gz</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>安装前先做压力测试<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ab -n 300 -c 10 http://phpadmin.cc/index.php</span><br><span class="line">		Requests per second:    72.19 [#/sec] (mean)		// 每秒处理请求数 72.19</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="安装xcache"><a href="#安装xcache" class="headerlink" title="安装xcache"></a>安装xcache</h1><p><strong>Host2</strong></p>
+<h2 id="yum安装"><a href="#yum安装" class="headerlink" title="yum安装"></a>yum安装</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install php-xcache -y</span><br><span class="line">$ systemctl reload httpd</span><br><span class="line"></span><br><span class="line">$ ab -n 300 -c 10 http://phpadmin.cc/index.php</span><br><span class="line">		Requests per second:    69.16 [#/sec] (mean)		// 每秒处理请求数 69.16</span><br><span class="line"></span><br><span class="line">经过多次测试,EPEL源中xcache的rpm包可能有问题,性能不升反降;</span><br><span class="line"></span><br><span class="line">卸载php-xcache,并编译安装</span><br><span class="line">$ yum remove php-xcache -y</span><br></pre></td></tr></table></figure>
+<h2 id="编译安装xcache"><a href="#编译安装xcache" class="headerlink" title="编译安装xcache"></a>编译安装xcache</h2><p>xcache<br>官网:<a href="http://xcache.lighttpd.net/" target="_blank" rel="external">http://xcache.lighttpd.net/</a><br>可能EPEL源中xcache性能不升反降，这里就不多做说明，可自行测试<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install php-devel -y 		# xcache依赖php-devel</span><br><span class="line">$ wget http://xcache.lighttpd.net/pub/Releases/3.2.0/xcache-3.2.0.tar.bz2</span><br><span class="line">$ tar xf xcache-3.2.0.tar.bz2</span><br><span class="line">$ cd xcache-3.2.0</span><br><span class="line">$ phpiz</span><br><span class="line">$ ./configure --enable-xcache --with-php-config=`which php-config`</span><br><span class="line">$ make &amp;&amp; make install</span><br><span class="line">$ cp xcache.ini /etc/php.d</span><br><span class="line">$ systemctl reload httpd</span><br><span class="line"></span><br><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<p>安装后压力测试<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ ab -n 300 -c 10 http://phpadmin.cc/index.php  </span><br><span class="line">Requests per second:    269.85 [#/sec] (mean)</span><br></pre></td></tr></table></figure></p>
+<p><strong> <span style="color:red">OK</span> </strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Apache/" rel="tag">#Apache</a>
+          
+            <a href="/tags/LAMP/" rel="tag">#LAMP</a>
+          
+            <a href="/tags/phpmyadmin/" rel="tag">#phpmyadmin</a>
+          
+            <a href="/tags/wordpress/" rel="tag">#wordpress</a>
+          
+            <a href="/tags/xcache/" rel="tag">#xcache</a>
+          
+            <a href="/tags/php-fpm/" rel="tag">#php-fpm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/22/LAMP1/" rel="next" title="LAMP1">
+                <i class="fa fa-chevron-left"></i> LAMP1
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/22/LAMP3/" rel="prev" title="LAMP3">
+                LAMP3 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/22/LAMP2/"
+           data-title="LAMP2" data-url="http://mrchen.org/2016/04/22/LAMP2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Mrchen" />
+          <p class="site-author-name" itemprop="name">Mrchen</p>
+          <p class="site-description motion-element" itemprop="description">Learning linux can make your life better.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/mrcheni" target="_blank" title="微博">
+                  
+                    <i class="fa fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.magedu.com" title="马哥教育" target="_blank">马哥教育</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.psiphon3.net/zh/download.html" title="科学上网" target="_blank">科学上网</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.chen-hao.com.cn" title="chen-hao" target="_blank">chen-hao</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.twoyang.net" title="TwOyAng'blog" target="_blank">TwOyAng'blog</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实验准备"><span class="nav-number">1.</span> <span class="nav-text">实验准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验环境"><span class="nav-number">2.</span> <span class="nav-text">实验环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建虚拟主机"><span class="nav-number">3.</span> <span class="nav-text">创建虚拟主机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">添加配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建目录"><span class="nav-number">3.2.</span> <span class="nav-text">创建目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#phpmyadmin"><span class="nav-number">3.3.</span> <span class="nav-text">phpmyadmin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wordpress"><span class="nav-number">3.4.</span> <span class="nav-text">wordpress</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装xcache"><span class="nav-number">4.</span> <span class="nav-text">安装xcache</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yum安装"><span class="nav-number">4.1.</span> <span class="nav-text">yum安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装xcache"><span class="nav-number">4.2.</span> <span class="nav-text">编译安装xcache</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"> Mrchen</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mrcheni"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
