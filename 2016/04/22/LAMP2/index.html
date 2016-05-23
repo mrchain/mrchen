@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://mrchen.org/2016/04/22/LAMP2/index.html">
 <meta property="og:site_name" content="Not Title">
 <meta property="og:description" content="CentOS 7, lamp (php-fpm)    (1) 三者分离于三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) xcache">
-<meta property="og:updated_time" content="2016-05-23T09:47:26.000Z">
+<meta property="og:updated_time" content="2016-05-23T09:50:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LAMP2">
 <meta name="twitter:description" content="CentOS 7, lamp (php-fpm)    (1) 三者分离于三台主机；    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；    (3) xcache">
@@ -324,7 +324,7 @@
         <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CentOS 7, lamp (php-fpm)</span><br><span class="line">    (1) 三者分离于三台主机；</span><br><span class="line">    (2) 一个虚拟主机用于提供phpMyAdmin；另一个虚拟主机用于提供wordpress；</span><br><span class="line">    (3) xcache</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <h1 id="实验准备"><a href="#实验准备" class="headerlink" title="实验准备"></a>实验准备</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ setenforce 0</span><br><span class="line">$ systemctl stop iptables</span><br><span class="line">$ systemctl stop firewalld</span><br><span class="line"></span><br><span class="line">修改文件:</span><br><span class="line">Linux: /etc/hosts</span><br><span class="line">windows: \Windows\System32\drivers\etc\hosts</span><br><span class="line">添加内容:</span><br><span class="line">172.18.56.71 phpadmin.cc</span><br><span class="line">172.18.56.71 wordpress.cc</span><br></pre></td></tr></table></figure>
-<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">三者分离于三台主机</span><br><span class="line"></span><br><span class="line">host1: 172.18.56.70	 httpd</span><br><span class="line">host2: 172.18.56.71  php-fpm</span><br><span class="line">host3: 172.18.56.72	 mariadb</span><br></pre></td></tr></table></figure>
+<h1 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">三者分离于三台主机</span><br><span class="line"></span><br><span class="line">host1: 172.18.56.70  httpd</span><br><span class="line">host2: 172.18.56.71  php-fpm</span><br><span class="line">host3: 172.18.56.72  mariadb</span><br></pre></td></tr></table></figure>
 <p><strong>Host1</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install httpd -y</span><br></pre></td></tr></table></figure></p>
 <p><strong>Host2</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ yum install php-fpm php-mysql php-mbstring -y</span><br></pre></td></tr></table></figure></p>
 <p>修改 <code>/etc/php-fpm.d/www.conf</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">listen = 127.0.0.1:9000				// 监听在那个IP:prot</span><br><span class="line">listen.allowed_clients = 127.0.0.1	// 允许那个地址访问</span><br><span class="line">修改为</span><br><span class="line">listen = 172.18.56.71:9000</span><br><span class="line">listen.allowed_clients = 172.18.56.70</span><br></pre></td></tr></table></figure></p>
