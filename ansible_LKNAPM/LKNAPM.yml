@@ -1,0 +1,19 @@
+- hosts:
+  - keepalived
+  remote_user: root
+  roles:
+  - nginx
+  - keepalived
+
+
+- hosts: httpd
+  remote_user: root
+  roles:
+  - apache
+  - php
+
+
+- hosts: mariadb
+  remote_user: root
+  roles:
+  - mariadb
