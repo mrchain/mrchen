@@ -80,15 +80,28 @@
 
 
 
-<meta name="description" content="Learning linux can make your life better.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Not Title">
-<meta property="og:url" content="http://mrchen.org/tags/LVS/index.html">
+<meta name="description" content="centos6安装python3朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。
+踩了一些坑，安装如下步骤操作顺利通过。
+安装前需要安装如下依赖关系
+# yum install gcc zlib-devel openssl-devel
+安装python3.5wget https://www.python.org/ftp/python/3.5.2/Pytho">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos6安装python3">
+<meta property="og:url" content="http://mrchen.org/2016/08/18/centos6安装python3/index.html">
 <meta property="og:site_name" content="Not Title">
-<meta property="og:description" content="Learning linux can make your life better.">
+<meta property="og:description" content="centos6安装python3朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。
+踩了一些坑，安装如下步骤操作顺利通过。
+安装前需要安装如下依赖关系
+# yum install gcc zlib-devel openssl-devel
+安装python3.5wget https://www.python.org/ftp/python/3.5.2/Pytho">
+<meta property="og:updated_time" content="2016-08-18T05:28:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Not Title">
-<meta name="twitter:description" content="Learning linux can make your life better.">
+<meta name="twitter:title" content="centos6安装python3">
+<meta name="twitter:description" content="centos6安装python3朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。
+踩了一些坑，安装如下步骤操作顺利通过。
+安装前需要安装如下依赖关系
+# yum install gcc zlib-devel openssl-devel
+安装python3.5wget https://www.python.org/ftp/python/3.5.2/Pytho">
 
 
 
@@ -106,7 +119,7 @@
   };
 </script>
 
-  <title> 标签: LVS | Not Title </title>
+  <title> centos6安装python3 | Not Title </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -137,7 +150,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -233,46 +246,128 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        LVS
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                centos6安装python3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-18T13:28:07+08:00" content="2016-08-18">
+              2016-08-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/18/centos6安装python3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/18/centos6安装python3/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h1 id="centos6安装python3"><a href="#centos6安装python3" class="headerlink" title="centos6安装python3"></a>centos6安装python3</h1><p>朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。</p>
+<p>踩了一些坑，安装如下步骤操作顺利通过。</p>
+<p>安装前需要安装如下依赖关系</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># yum install gcc zlib-devel openssl-devel</span><br></pre></td></tr></table></figure>
+<h2 id="安装python3-5"><a href="#安装python3-5" class="headerlink" title="安装python3.5"></a>安装python3.5</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz</span><br><span class="line">tar xf Python-3.5.2.tar.xz</span><br><span class="line">cd Python-3.5.2</span><br><span class="line">./configure --prefix=/usr/local/python3 --enable-shared</span><br><span class="line">make -j 4</span><br><span class="line">make install</span><br><span class="line">ln -s /usr/local/python3/bin/python3 /usr/local/bin</span><br></pre></td></tr></table></figure>
+<h2 id="安装setuptools"><a href="#安装setuptools" class="headerlink" title="安装setuptools"></a>安装setuptools</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://pypi.python.org/packages/source/s/setuptools/setuptools-19.6.tar.gz</span><br><span class="line">tar xf setuptools-19.6.tar.gz</span><br><span class="line">cd setuptools-19.6</span><br><span class="line">python3 setup.py build</span><br><span class="line">python3 setup.py install</span><br></pre></td></tr></table></figure>
+<h2 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://pypi.python.org/packages/source/p/pip/pip-8.0.2.tar.gz</span><br><span class="line">tar xf pip-8.0.2.tar.gz</span><br><span class="line">cd pip-8.0.2</span><br><span class="line">python3 setup.py build</span><br><span class="line">python3 setup.py install</span><br><span class="line">ln -s /usr/local/python3/bin/pip3 /usr/local/bin</span><br></pre></td></tr></table></figure>
+<p>OK，完成了整个python3环境的安装。</p>
 
-      <h1 class="post-title">
+      
+    </div>
+    
+    <div>
+      
         
-            <a class="post-title-link" href="/2016/05/09/LVS/" itemprop="url">
-              
-                <span itemprop="name">LVS</span>
-              
-            </a>
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-09T11:15:41+08:00"
-              content="2016-05-09" >
-          05-09
-        </time>
-      </div>
+    <footer class="post-footer">
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/13/xiache/" rel="next" title="xiache">
+                <i class="fa fa-chevron-left"></i> xiache
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -280,6 +375,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/18/centos6安装python3/"
+           data-title="centos6安装python3" data-url="http://mrchen.org/2016/08/18/centos6安装python3/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -299,8 +402,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -396,6 +508,17 @@
       </section>
 
       
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#centos6安装python3"><span class="nav-number">1.</span> <span class="nav-text">centos6安装python3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装python3-5"><span class="nav-number">1.1.</span> <span class="nav-text">安装python3.5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装setuptools"><span class="nav-number">1.2.</span> <span class="nav-text">安装setuptools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装pip"><span class="nav-number">1.3.</span> <span class="nav-text">安装pip</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
 
     </div>
   </aside>
@@ -480,6 +603,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
