@@ -257,6 +257,110 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/24/SSH代理/" itemprop="url">
+                  SSH代理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-24T17:25:59+08:00" content="2016-08-24">
+              2016-08-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/24/SSH代理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/SSH代理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本地代理<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -L &lt;local port&gt;:&lt;remote host&gt;:&lt;remote port&gt; &lt;SSH hostname&gt;</span><br><span class="line"></span><br><span class="line">	例: ssh -L 8080:www.google.com:80 user@122.10.117.152 -p 22 -N</span><br><span class="line"></span><br><span class="line">		把本地8080端口通过 122.10.117.152 ssh代理为 www.google.com:80</span><br><span class="line"></span><br><span class="line">		访问本地127.0.0.1:80相当于访问www.google.com:80</span><br><span class="line"></span><br><span class="line">		详情: man ssh</span><br></pre></td></tr></table></figure></p>
+<p>端口转发<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -R &lt;local port&gt;:&lt;remote host&gt;:&lt;remote port&gt; &lt;SSH hostname&gt;</span><br><span class="line"></span><br><span class="line">	例: ssh -R 2222:127.0.0.1:22 root@172.18.22.21 -N</span><br><span class="line"></span><br><span class="line">		将本地 127.0.0.1:22 转发至 172.18.22.21:2222</span><br></pre></td></tr></table></figure></p>
+<p>动态转发<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh -D &lt;local port&gt; &lt;SSH Server&gt;</span><br><span class="line"></span><br><span class="line">	例: ssh -D 1080 root@122.10.117.152</span><br><span class="line"></span><br><span class="line">		在本地创建SOCKS代理,在浏览器上设置localhost:1080代理即可。在公共环境不安全网络中特别适用</span><br></pre></td></tr></table></figure></p>
+<p>参考：<a href="https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/linux/l-cn-sshforward/</a></p>
+
+          
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/24/ffmpeg/" itemprop="url">
                   FFmpeg
                 </a>
@@ -733,133 +837,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/27/HAproxy/" itemprop="url">
-                  HAproxy
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-27T10:55:20+08:00" content="2016-05-27">
-              2016-05-27
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Cluster/" itemprop="url" rel="index">
-                    <span itemprop="name">Cluster</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/27/HAproxy/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/27/HAproxy/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>HAProxy是一款提供高可用性、负载均衡以及基于TCP（第四层）和HTTP（第七层）应用的代理软件，HAProxy是完全免费的、借助HAProxy可以快速并且可靠的提供基于TCP和HTTP应用的代理解决方案。</p>
-<p><strong>HAproxy工作原理</strong></p>
-<blockquote>
-<p>HAProxy由前端（frontend）和后端（backend），前端和后端都可以有多个。也可以只有一个listen块来同时实现前端和后端。这里主要讲一下frontend和backend工作模式。</p>
-<hr>
-<p>前端（frontend）区域可以根据HTTP请求的header信息来定义一些规则，然后将符合某规则的请求转发到相应后端（backend）进行处理。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/27/HAproxy/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -905,7 +882,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -922,7 +899,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

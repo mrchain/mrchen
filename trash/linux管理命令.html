@@ -1,0 +1,494 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mrchen, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="详情：0323Linux内核：抢占式多任务	内核的功能：进程管理(进程调度)		进程调度：保存现场,恢复现场			task struct：任务结构			task list：任务列表	进程类型：			守护进程：在系统引导过程中启动的进程,跟终端无关的进程；			前台进程：与终端相关,通过终端启动的进程；				注意：也可把在前台启动的进程送往后台,以守护模式运行；	进程状态：			运行态：runni">
+<meta property="og:type" content="website">
+<meta property="og:title" content="linux管理命令">
+<meta property="og:url" content="http://mrchen.org/trash/linux管理命令.html">
+<meta property="og:site_name" content="NotTitle">
+<meta property="og:description" content="详情：0323Linux内核：抢占式多任务	内核的功能：进程管理(进程调度)		进程调度：保存现场,恢复现场			task struct：任务结构			task list：任务列表	进程类型：			守护进程：在系统引导过程中启动的进程,跟终端无关的进程；			前台进程：与终端相关,通过终端启动的进程；				注意：也可把在前台启动的进程送往后台,以守护模式运行；	进程状态：			运行态：runni">
+<meta property="og:updated_time" content="2016-08-24T08:58:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux管理命令">
+<meta name="twitter:description" content="详情：0323Linux内核：抢占式多任务	内核的功能：进程管理(进程调度)		进程调度：保存现场,恢复现场			task struct：任务结构			task list：任务列表	进程类型：			守护进程：在系统引导过程中启动的进程,跟终端无关的进程；			前台进程：与终端相关,通过终端启动的进程；				注意：也可把在前台启动的进程送往后台,以守护模式运行；	进程状态：			运行态：runni">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title>
+  
+
+  
+    linux管理命令 | NotTitle
+  
+</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?96729f1c7fee4d30a55720079dbc298a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">NotTitle</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">欢迎光临，如果您发现文章中有任何错误，请留言告知下，非常感谢。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-message">
+          <a href="/message" rel="section">
+            
+            留言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+    
+      <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">详情：0323</span><br><span class="line"></span><br><span class="line">Linux内核：抢占式多任务</span><br><span class="line"></span><br><span class="line">	内核的功能：进程管理(进程调度)</span><br><span class="line">		进程调度：保存现场,恢复现场</span><br><span class="line">			task struct：任务结构</span><br><span class="line">			task list：任务列表</span><br><span class="line"></span><br><span class="line">	进程类型：</span><br><span class="line">			守护进程：在系统引导过程中启动的进程,跟终端无关的进程；</span><br><span class="line">			前台进程：与终端相关,通过终端启动的进程；</span><br><span class="line">				注意：也可把在前台启动的进程送往后台,以守护模式运行；</span><br><span class="line"></span><br><span class="line">	进程状态：</span><br><span class="line">			运行态：running</span><br><span class="line">			就绪态：ready</span><br><span class="line">			睡眠态：</span><br><span class="line">				可中断：interruptable			不需要做数据准备,随叫随到</span><br><span class="line">				不可中断：uninterruptable		需要加载数据；(详情：0323.(01) 01:50)</span><br><span class="line">			停止态：stoped	暂停于内存中,但不会被调度,除非手动启动：</span><br><span class="line">			僵死态：zombie</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	进程分类：</span><br><span class="line">		CPU-Bound</span><br><span class="line">		IO-Bound</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">内核完成资源分配</span><br><span class="line">应用不能直接访问硬件</span><br><span class="line">一次I/O分两段进行</span><br><span class="line">	1.从磁盘加载到内核内存</span><br><span class="line">	2.从内核内存复制到进程内存</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	进程优先级</span><br><span class="line">		0-139</span><br><span class="line">			1-99：实时优先级		数字越大优先级越高；</span><br><span class="line">			100-139：静态优先级		数字越小优先级越高；</span><br><span class="line">		Nice值：</span><br><span class="line">			-20,19</span><br><span class="line"></span><br><span class="line">		调整进程优先级；</span><br><span class="line"></span><br><span class="line">			可通过nice值调整的优先级范围；100-139</span><br><span class="line">				分别对应：-20,19</span><br><span class="line"></span><br><span class="line">			进程启动时，其nice值默认为0，其优先级为120；</span><br><span class="line"></span><br><span class="line">			nice命令；</span><br><span class="line">				以指定的nice值启动并运行命令</span><br><span class="line">					# nice [OPTION] [COMMAND [ARGU]...]</span><br><span class="line">						选项：</span><br><span class="line">							-n NICE</span><br><span class="line"></span><br><span class="line">						注意：仅管理员可调低nice值；</span><br><span class="line"></span><br><span class="line">			renice命令：</span><br><span class="line">					# renice [-n] NICE PID...</span><br><span class="line"></span><br><span class="line">				查看Nice值和优先级；</span><br><span class="line">					ps axo pid,ni,priority,comm</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	vmstat</span><br><span class="line">	  -s :显示内存统计数据</span><br><span class="line"></span><br><span class="line">		procs：进程的队列</span><br><span class="line">			r：运行或大等待CPU时间片的进程的个数</span><br><span class="line">			b：被阻塞（通常为等待IO完成）的进程队列的长度</span><br><span class="line">		memory：</span><br><span class="line">			swpd：从物理内存交换至swap中的数据量</span><br><span class="line">			free：未使用的屋里内存大小</span><br><span class="line">			buffer：buffer空间大小，通常为缓存写操作相关</span><br><span class="line">			cache：cache空间大小，通常为缓存读操作相关</span><br><span class="line">		swap</span><br><span class="line">			si：swap in 数据进入swap中的数据量，通常是速率 kb/s</span><br><span class="line">			so：swap out 数据离开swap的数据量，</span><br><span class="line">		io</span><br><span class="line">			bi：block in 从块设备读入的数据量，通常是速率，kb/s</span><br><span class="line">			bo：block out 保存至块设备中的数据量，通常是速率 kb/s</span><br><span class="line">		system</span><br><span class="line">			in：interrupts 中断发生速率，每秒钟的中断数</span><br><span class="line">			cs；context switch，上下文切换，进程切换，速率，通常为每秒钟切换次数</span><br><span class="line"></span><br><span class="line">		cpu</span><br><span class="line">			us：user space 用户空间比例</span><br><span class="line">			sy：system space 内核空间比例</span><br><span class="line">			id：idle 空闲比例</span><br><span class="line">			wa：wait 等待IO完成比例</span><br><span class="line">			st：stolen 被偷取的比例</span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	ps</span><br><span class="line">		ps - report a snapshot of the current processes.</span><br><span class="line"></span><br><span class="line">	ps [options]</span><br><span class="line">		选项有三种风格</span><br><span class="line">			1   UNIX options, which may be grouped and must be preceded by a dash.</span><br><span class="line">	      	2   BSD options, which may be grouped and must not be used with a dash.</span><br><span class="line">	      	3   GNU long options, which are preceded by two dashes.</span><br><span class="line"></span><br><span class="line">	选项：</span><br><span class="line">		a: 所有与终端相关的进程；</span><br><span class="line">		u: 所有与终端无关的进程；</span><br><span class="line">		x:以用户为中心组织进程状态信息显示；</span><br><span class="line"></span><br><span class="line">			常用组合之一：aux</span><br><span class="line"></span><br><span class="line">				USER 	启动进程的用户</span><br><span class="line">				PID 	进程PID号</span><br><span class="line">				%CPU 	累计CPU使用时间</span><br><span class="line">				%MEM 	内存空间占用比率(占整个内存的比率)</span><br><span class="line">				VSZ 	虚拟内存集 (Virtual Memory Size) (大概意思：全部内存减去共享库)</span><br><span class="line">							真正用到的数据的大小(内核中组织的数据结构)</span><br><span class="line"></span><br><span class="line">				RSS:Resident Size 坚决不能放在交换分区上的就叫做常驻内存集</span><br><span class="line">				TTY:	终端</span><br><span class="line">				STAT:	状态</span><br><span class="line">					R:running					运行中</span><br><span class="line">					S:interruptable sleeping	可中断睡眠</span><br><span class="line">					D:uninterruptable sleeping	不可中断睡眠</span><br><span class="line">					T:stopped	停止态</span><br><span class="line">					Z:zombie	僵死态</span><br><span class="line"></span><br><span class="line">					+: 前台进程</span><br><span class="line">					l: 多线程进程</span><br><span class="line">					N: 低优先级进程</span><br><span class="line">					&lt;: 高优先级进程</span><br><span class="line">					s: session leader	回话引领者</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			常用组合之二：-ef</span><br><span class="line">			常用组合之三：-eFH</span><br><span class="line"></span><br><span class="line">				-e：显示所有进程</span><br><span class="line">				-f：显示完整格式的进程信息</span><br><span class="line">				-F：显示完整格式的进程信息 比-f多一点</span><br><span class="line">				-H：以层级结构显示进程的相关信息</span><br><span class="line"></span><br><span class="line">					UID 	用户</span><br><span class="line">					PID 	进程号</span><br><span class="line">					PPID	父进程的进程号</span><br><span class="line">					C 		CPU占用百分比</span><br><span class="line">					PSR 	那颗CPU上</span><br><span class="line">					STIME 	启动时间</span><br><span class="line">					TTY	 	与其相关的终端</span><br><span class="line">					TIME	累计CPU运行时间</span><br><span class="line">					COM 	启动此进程的命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			常用组合之四：auo,-eo</span><br><span class="line">				o field,field2...：自定义要显示的字段列表,各字段以&quot;,&quot;分割；</span><br><span class="line">					常用的field: pid,ni,pri,psr,pcpu,stat,comm,tty,ppid,rtprio</span><br><span class="line"></span><br><span class="line">								rtprio: real time priority 实时优先级</span><br><span class="line">								pri:priority,表示优先级</span><br><span class="line">								psr:运行在那颗CPU</span><br><span class="line">								stat:状态</span><br><span class="line">								ni:nice值   -20~19 值越小优先级越高</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	psgrep,pkill	</span><br><span class="line">		pgrep, pkill - look up or signal processes based on name and other attributes</span><br><span class="line"></span><br><span class="line">		 pgrep [options] pattern</span><br><span class="line">		 	-u uid:effective user显示指定用户的进程</span><br><span class="line">		 	-U uid:read user 谁启动的</span><br><span class="line">		 	-l:显示进程名</span><br><span class="line">		 	-a:显示完整格式的进程名</span><br><span class="line">		 	-t TERMINAL:与指定的终端相关的进程</span><br><span class="line">		 	-P pid:显示此进程的子进程</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		pkill [options] &lt;pattern&gt;</span><br><span class="line"></span><br><span class="line">			Options:</span><br><span class="line">			 -&lt;sig&gt;, --signal &lt;sig&gt;    signal to send (either number or name)</span><br><span class="line">			 -e, --echo                display what is killed</span><br><span class="line">			 -c, --count               count of matching processes</span><br><span class="line">			 -f, --full                use full process name to match</span><br><span class="line">			 -g, --pgroup &lt;PGID,...&gt;   match listed process group IDs</span><br><span class="line">			 -G, --group &lt;GID,...&gt;     match real group IDs</span><br><span class="line">			 -n, --newest              select most recently started</span><br><span class="line">			 -o, --oldest              select least recently started</span><br><span class="line">			 -P, --parent &lt;PPID,...&gt;   match only child processes of the given parent</span><br><span class="line">			 -s, --session &lt;SID,...&gt;   match session IDs</span><br><span class="line">			 -t, --terminal &lt;tty,...&gt;  match by controlling terminal</span><br><span class="line">			 -u, --euid &lt;ID,...&gt;       match by effective IDs</span><br><span class="line">			 -U, --uid &lt;ID,...&gt;        match by real IDs</span><br><span class="line">			 -x, --exact               match exactly with the command name</span><br><span class="line">			 -F, --pidfile &lt;file&gt;      read PIDs from file</span><br><span class="line">			 -L, --logpidfile          fail if PID file is not locked</span><br><span class="line">			 --ns &lt;PID&gt;                match the processes that belong to the same</span><br><span class="line">			                           namespace as &lt;pid&gt;</span><br><span class="line">			 --nslist &lt;ns,...&gt;         list which namespaces will be considered for</span><br><span class="line">			                           the --ns option.</span><br><span class="line">			                           Available namespaces: ipc, mnt, net, pid, user, uts</span><br><span class="line"></span><br><span class="line">			 -h, --help     display this help and exit</span><br><span class="line">			 -V, --version  output version information and exit</span><br><span class="line"> </span><br><span class="line"> --------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">		pidof命令：</span><br><span class="line">		 	根据进程名,取其pid；</span><br><span class="line"></span><br><span class="line">		uptime命令：显示系统时间、运行时长及平均负载；</span><br><span class="line">			过去1分钟、过去5分钟和15分钟的平均负载；</span><br><span class="line">					等待运行的进程队列长度；</span><br><span class="line">		pmap命令：一个进程的内存映射</span><br><span class="line">			pmap [options] pid [...]</span><br><span class="line">				-x：显示详细格式的信息</span><br><span class="line">		另一种查看方式：# cat /proc/PID/maps</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	top</span><br><span class="line">		top - display Linux processes</span><br><span class="line"></span><br><span class="line">		当前时间	启动时间	登录的用户	负载平均值：过去的一分钟，五分钟，十五分钟</span><br><span class="line">		总共运行的进程数	一个运行 多少个睡眠 停止 僵死</span><br><span class="line">		us：user space</span><br><span class="line">		sy：system space </span><br><span class="line">		ni：被nic调整的进程占用</span><br><span class="line">		id：空闲百分比</span><br><span class="line">		wa：等待IO完成</span><br><span class="line">		hi：硬件中断百分比</span><br><span class="line">		si：软件中断百分比</span><br><span class="line">		st：被偷走的；虚拟化</span><br><span class="line">		按s：改变top刷新时间间隔</span><br><span class="line">		CPU分开显示按1</span><br><span class="line">		不想显示内存按m</span><br><span class="line">		不想显示CPU按t</span><br><span class="line">		不想显示负载按l</span><br><span class="line">		杀死一个进程按k</span><br><span class="line">		退出q</span><br><span class="line"></span><br><span class="line">		PID</span><br><span class="line">		USER</span><br><span class="line">		PR	优先级</span><br><span class="line">		NI	nic值</span><br><span class="line">		VIRT	虚拟内存集</span><br><span class="line">		PES	常驻内存集</span><br><span class="line">		SHR	共享内存空间</span><br><span class="line">		S	当前状态</span><br><span class="line">		%CPU	占据CPU百分比</span><br><span class="line">		%MEM	内存百分比</span><br><span class="line">		+TIME	运行时长</span><br><span class="line">		COMMAND	启动命令</span><br><span class="line"></span><br><span class="line">	排序：</span><br><span class="line">		P: 以占据CPU百分比排序；</span><br><span class="line">		M: 以占据内存百分比排序；</span><br><span class="line">		T: 累积占用CPU时间排序；</span><br><span class="line"></span><br><span class="line">	首部信息</span><br><span class="line">		uptime信息: l</span><br><span class="line">			也可以用uptime命令</span><br><span class="line">		tasks及cpu信息:t</span><br><span class="line">		内存信息:m</span><br><span class="line"></span><br><span class="line">		退出命令:q</span><br><span class="line">		修改刷新时间:s</span><br><span class="line">		终止指定进程:k</span><br><span class="line"></span><br><span class="line">	选项:</span><br><span class="line">		-d #  指定刷新时间间隔，默认为3秒；</span><br><span class="line">		-b 	  以批次方式显示</span><br><span class="line">		-n #  显示多少批次</span><br><span class="line">			例：top -b -n 1</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	htop</span><br><span class="line">		选项：</span><br><span class="line">			-d #：指定延时时间间隔；</span><br><span class="line">			-u UserName：仅显示指定用户的进程</span><br><span class="line">			-s COLUME：以指定字段进行排序；</span><br><span class="line">		子命令：</span><br><span class="line">			l：显示选定的进程打开的文件列表；</span><br><span class="line">			s：跟踪选定的进程的系统调用；</span><br><span class="line">			t：以层级关系显示各进程状态；</span><br><span class="line">			a：将徐昂定的进程绑定至某指定的CPU核心；</span><br><span class="line"></span><br><span class="line">		CPU:蓝色低优先级，正常，内核，虚拟化占用的</span><br><span class="line">		MEM:已用，buffers，cache</span><br><span class="line">		F1:帮助</span><br><span class="line">		F2:设置</span><br><span class="line">		F3:根据名字搜索</span><br><span class="line">		F4:根据名称过滤</span><br><span class="line">		F5:树状显示</span><br><span class="line">		u：选择指定用户的进程</span><br><span class="line">		H：显示或隐藏用户的进程</span><br><span class="line">		K：显示或隐藏内核的进程</span><br><span class="line">		a：绑定进程到指定的CPU上</span><br><span class="line">		#：快速将光标定位至指定的PID进程上</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">		glances命令：</span><br><span class="line">			- A cross-platform curses-based monitoring tool</span><br><span class="line">			</span><br><span class="line">			内建命令：</span><br><span class="line">				</span><br><span class="line">			常用选项：</span><br><span class="line">				-b：以Byte为单位显示网上数据速率；</span><br><span class="line">				-d：关闭磁盘I/O模块；</span><br><span class="line">				-m：关闭mount模块；</span><br><span class="line">				-n：关闭network模块；</span><br><span class="line">				-t #：刷新时间间隔；</span><br><span class="line">				-1：每个cpu的相关数据单独显示；</span><br><span class="line">				-o &#123;HTML|CSV&#125;：输出格式；</span><br><span class="line">				-f  /PATH/TO/SOMEDIR：设定输出文件的位置；</span><br><span class="line">			</span><br><span class="line">			C/S模式下运行glances命令：</span><br><span class="line">				服务模式：</span><br><span class="line">					glances  -s  -B  IPADDR</span><br><span class="line">					</span><br><span class="line">					IPADDR：本机的某地址，用于监听；</span><br><span class="line">					</span><br><span class="line">				客户端模式：</span><br><span class="line">					glances  -c  IPADDR</span><br><span class="line">					</span><br><span class="line">					IPADDR：是远程服务器的地址；</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	dstat</span><br><span class="line">		通用工具，用于生成系统资源统计：</span><br><span class="line"></span><br><span class="line">		dstat [-afv] [options...] [delay [count]]</span><br><span class="line"></span><br><span class="line">		常用选型；</span><br><span class="line">			-c	--cpu：显示cpu相关信息；、</span><br><span class="line">					-C #,#,....,total	多长时间刷新一次,显示几次结束</span><br><span class="line"></span><br><span class="line">			-d 	--disk: 显示磁盘的相关信息；</span><br><span class="line">					-D sda,sdb,...tobal</span><br><span class="line">			-g 	显示page相关的速率数据；</span><br><span class="line">			-m 	Memory相关的统计数据；</span><br><span class="line">			-n 	Interface的相关统计数据；</span><br><span class="line">			-p 	显示process的相关统计数据；</span><br><span class="line">			-r 	显示io请求的相关统计数据；</span><br><span class="line">			-s 	显示swapped的相关统计数据；</span><br><span class="line"></span><br><span class="line">			--top-cpu		最占用CPU的进程</span><br><span class="line">			--top-io		最占用io的进程</span><br><span class="line">			--top-mem		最占用内存的进程</span><br><span class="line">			--top-lantency	延迟最大的进程</span><br><span class="line"></span><br><span class="line">			..... 更多详情0323-03 01:16 or man dstat</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">	kill</span><br><span class="line">		- terminate a process 	终止指定的进程</span><br><span class="line"></span><br><span class="line">		用于向进程发出信号,以实施对进程的管理；</span><br><span class="line"></span><br><span class="line">		显示当前系统可用信号；</span><br><span class="line">			kill -l [signal]</span><br><span class="line"></span><br><span class="line">			每个信号的标识方法有三种；</span><br><span class="line">				1.信号的数字标识；</span><br><span class="line">				2.信号的完整标识；</span><br><span class="line">				3.信号的简写表示；</span><br><span class="line"></span><br><span class="line">			向进程发出信号；</span><br><span class="line">				kill [-s signal | -SIGNAL ] pid</span><br><span class="line"></span><br><span class="line">				常用信号；</span><br><span class="line">					1:SIGHUP:	无须关闭进程而让其重读配置文件；</span><br><span class="line">					2:SIGINT:	终止正在运行的进程,相当于Ctrl+c</span><br><span class="line">					9:SIGKILL:	强行杀死运行中的进程；</span><br><span class="line">					15:SIGTERM:	终止运行中的进程；</span><br><span class="line">					18:SIGCONT:	停止正在运行的进程,相当于Ctrl+z</span><br><span class="line">					19:SIGSTOP:	调回18停止的进程,也可以用fg</span><br><span class="line"></span><br><span class="line">	kailall</span><br><span class="line">		-kill processes by name</span><br><span class="line"></span><br><span class="line">		kiall [-SIGNAL] program</span><br><span class="line"></span><br><span class="line">			例: killall NAME</span><br><span class="line">---------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+    
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="trash/linux管理命令.html"
+           data-title="linux管理命令" data-url="http://mrchen.org/trash/linux管理命令.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="MrChen" />
+          <p class="site-author-name" itemprop="name">MrChen</p>
+          <p class="site-description motion-element" itemprop="description">Learning linux can make your life better.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.systemd.cn" title="Systemd.cn" target="_blank">Systemd.cn</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.twoyang.net" title="TwOyAng'blog" target="_blank">TwOyAng'blog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geass.link" title="Lei Jin's blog" target="_blank">Lei Jin's blog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.chen-hao.com.cn" title="火柴博客" target="_blank">火柴博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"> Mrchen</span>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"mrcheni"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+      
+      <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+      <script src="/js/src/hook-duoshuo.js"></script>
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
