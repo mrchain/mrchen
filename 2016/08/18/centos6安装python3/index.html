@@ -88,7 +88,7 @@
 <meta property="og:site_name" content="Not Title">
 <meta property="og:description" content="朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。
 踩了一些坑，安装如下步骤操作顺利通过。">
-<meta property="og:updated_time" content="2016-08-18T08:02:38.000Z">
+<meta property="og:updated_time" content="2016-08-24T02:06:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="centos6安装python3">
 <meta name="twitter:description" content="朋友的新机器，python3是python未来的趋势，安装在本机的python2千万别动。
@@ -329,7 +329,7 @@
 <a id="more"></a>
 <p>安装前需要安装如下依赖关系</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># yum install gcc zlib-devel openssl-devel</span><br></pre></td></tr></table></figure>
-<h2 id="安装python3-5"><a href="#安装python3-5" class="headerlink" title="安装python3.5"></a>安装python3.5</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz</span><br><span class="line">tar xf Python-3.5.2.tar.xz</span><br><span class="line">cd Python-3.5.2</span><br><span class="line">./configure --prefix=/usr/local/python3 --enable-shared</span><br><span class="line">make -j 4</span><br><span class="line">make install</span><br><span class="line">ln -s /usr/local/python3/bin/python3 /usr/local/bin</span><br></pre></td></tr></table></figure>
+<h2 id="安装python3-5"><a href="#安装python3-5" class="headerlink" title="安装python3.5"></a>安装python3.5</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz</span><br><span class="line">tar xf Python-3.5.2.tar.xz</span><br><span class="line">cd Python-3.5.2</span><br><span class="line">./configure --prefix=/usr/local/python3 --enable-shared</span><br><span class="line">make -j 4</span><br><span class="line">make install</span><br><span class="line">ln -s /usr/local/python3/bin/python3 /usr/local/bin</span><br><span class="line">cat &gt; /etc/ld.so.conf.d/python3.conf &lt;&lt; EOF</span><br><span class="line">/usr/local/python3/lib/</span><br><span class="line">EOF</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
 <h2 id="安装setuptools"><a href="#安装setuptools" class="headerlink" title="安装setuptools"></a>安装setuptools</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://pypi.python.org/packages/source/s/setuptools/setuptools-19.6.tar.gz</span><br><span class="line">tar xf setuptools-19.6.tar.gz</span><br><span class="line">cd setuptools-19.6</span><br><span class="line">python3 setup.py build</span><br><span class="line">python3 setup.py install</span><br></pre></td></tr></table></figure>
 <h2 id="安装pip"><a href="#安装pip" class="headerlink" title="安装pip"></a>安装pip</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://pypi.python.org/packages/source/p/pip/pip-8.0.2.tar.gz</span><br><span class="line">tar xf pip-8.0.2.tar.gz</span><br><span class="line">cd pip-8.0.2</span><br><span class="line">python3 setup.py build</span><br><span class="line">python3 setup.py install</span><br><span class="line">ln -s /usr/local/python3/bin/pip3 /usr/local/bin</span><br></pre></td></tr></table></figure>
 <p>OK，完成了整个python3环境的安装。</p>
