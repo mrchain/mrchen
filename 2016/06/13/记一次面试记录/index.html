@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="瞎扯," />
+  <meta name="keywords" content="记录," />
 
 
 
@@ -80,25 +80,22 @@
 
 
 
-<meta name="description" content="瞎扯
-前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
+<meta name="description" content="前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
 1.获取某个时间段以内同一个ip对nginx的访问次数示例：获取2016.06.14 03:00:00 - 04:00:0014/Jun/2016:03:00:0014/Jun/2016:04:00:00
-思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显">
+思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显示其出">
 <meta property="og:type" content="article">
-<meta property="og:title" content="xiache">
+<meta property="og:title" content="记一次面试题">
 <meta property="og:url" content="http://mrchen.org/2016/06/13/记一次面试记录/index.html">
 <meta property="og:site_name" content="Mr.Chen">
-<meta property="og:description" content="瞎扯
-前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
+<meta property="og:description" content="前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
 1.获取某个时间段以内同一个ip对nginx的访问次数示例：获取2016.06.14 03:00:00 - 04:00:0014/Jun/2016:03:00:0014/Jun/2016:04:00:00
-思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显">
-<meta property="og:updated_time" content="2016-06-13T13:44:01.000Z">
+思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显示其出">
+<meta property="og:updated_time" content="2019-08-03T04:54:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="xiache">
-<meta name="twitter:description" content="瞎扯
-前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
+<meta name="twitter:title" content="记一次面试题">
+<meta name="twitter:description" content="前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。好在我也没有落下基础，下面我对上次面试做个总结。
 1.获取某个时间段以内同一个ip对nginx的访问次数示例：获取2016.06.14 03:00:00 - 04:00:0014/Jun/2016:03:00:0014/Jun/2016:04:00:00
-思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显">
+思路:(1)先取03:00-04:00时间段内所有的访问记录(2)显示其出">
 
 
 
@@ -116,7 +113,7 @@
   };
 </script>
 
-  <title> xiache | Mr.Chen </title>
+  <title> 记一次面试题 | Mr.Chen </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +261,7 @@
             
             
               
-                xiache
+                记一次面试题
               
             
           </h1>
@@ -330,8 +327,7 @@
       
 
       
-        <p>瞎扯</p>
-<p>前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。<br>好在我也没有落下基础，下面我对上次面试做个总结。</p>
+        <p>前天第一次去面试，学了一大堆很高端的技术都没有问到。问了一些基础问题。<br>好在我也没有落下基础，下面我对上次面试做个总结。</p>
 <p>1.获取某个时间段以内同一个ip对nginx的访问次数<br>示例：获取<code>2016.06.14</code> <code>03:00:00 - 04:00:00</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">14/Jun/2016:03:00:00</span><br><span class="line"></span><br><span class="line">14/Jun/2016:04:00:00</span><br></pre></td></tr></table></figure></p>
 <p>思路:<br>(1)先取03:00-04:00时间段内所有的访问记录<br>(2)显示其出现的次数<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(1)</span><br><span class="line">sed &apos;s@\[@@g&apos; /var/log/nginx/access.log | awk &apos;$4 &gt;=&quot;14/Jun/2016:03:00:00&quot; &amp;&amp; $4 &lt;=&quot;14/Jun/2016:04:00:00&quot; &#123;print $1&#125;&apos; | uniq -c</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(2)</span><br><span class="line">sed &apos;s@\[@@g&apos; /var/log/nginx/access.log | awk &apos;$4 &gt;=&quot;14/Jun/2016:03:00:00&quot; &amp;&amp; $4 &lt;=&quot;14/Jun/2016:04:00:00&quot; &#123;ip[$1]++&#125;END &#123;for (s in ip) print s,ip[s]&#125; &apos;</span><br></pre></td></tr></table></figure>
@@ -357,7 +353,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/瞎扯/" rel="tag">#瞎扯</a>
+            <a href="/tags/记录/" rel="tag">#记录</a>
           
         </div>
       
@@ -403,7 +399,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/06/13/记一次面试记录/"
-           data-title="xiache" data-url="http://mrchen.org/2016/06/13/记一次面试记录/">
+           data-title="记一次面试题" data-url="http://mrchen.org/2016/06/13/记一次面试记录/">
       </div>
     
   </div>
@@ -465,7 +461,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
